@@ -4,14 +4,17 @@
 % Configurations
 %%%%%%%%%%%%%%%%
 global workers_num logDir;
-workers_num = 18;
+workers_num = 10;
 staliro_dir = '../s-taliro_public/trunk/';
 breach_dir = '../breach';
 logDir = '../falsify-data/';
-maxIter = 100;
-maxEpisodes = 200;
+
+
+maxIter = 10;
+maxEpisodes = 20;
+
 do_arch2014 = true;
-do_ptc = true;
+do_ptc = false;
 do_insulin = false;
 
 config_tmpl = struct('maxIter', maxIter,...
@@ -41,7 +44,10 @@ cmaes_algomdls = {{'breach', 'cmaes', 'arch2014_staliro'}};
 basic_algomdls = {{'breach', 'basic', 'arch2014_staliro'}};
 nm_algomdls = {{'breach', 'global_nelder_mead', 'arch2014_staliro'}};
 %br_algomdls = {{'breach', 'basic', 'arch2014_staliro'}};
-sampleTimes = [10, 5, 1];
+
+%sampleTimes = [10, 5, 1];
+sampleTimes = [10];
+
 %algomdls = {{'RL', 'RAND', 'autotrans_mod04'}};
 %sampleTimes = 10;
 %br_algomdls = {};

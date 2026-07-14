@@ -140,8 +140,17 @@ class A3CLSTMGaussian(chainer.ChainList, a3c.A3CModel, RecurrentChainMixin):
         self.v_head = L.Linear(obs_size, hidden_size)
         self.pi_lstm = L.LSTM(hidden_size, lstm_size)
         self.v_lstm = L.LSTM(hidden_size, lstm_size)
-        self.pi = policies.LinearGaussianPolicyWithDiagonalCovariance(
-            lstm_size, action_size)
+
+        "LinerGaussianPolicyWithDiagonalCovariance doesnt exitst in ChainerRL 0.8.0 "
+        #self.pi = policies.LinearGaussianPolicyWithDiagonalCovariance(lstm_size, action_size)
+        self.pi = policies.FCGaussianPolicyWithStateIndependentCovariance(
+            lstm_size,
+            action_size,
+            n_hidden_layers=0,
+            var_type='diagonal'
+        )
+
+
         self.v = v_function.FCVFunction(lstm_size)
         super().__init__(self.pi_head, self.v_head,
                          self.pi_lstm, self.v_lstm, self.pi, self.v)
@@ -233,6 +242,28 @@ def make_acer_agent(obs_space_dim, action_space_dim):
 
 def make_a3c_agent(obs_space_dim, action_space_dim):
     model = A3CLSTMGaussian(obs_space_dim, action_space_dim)
+
+    "dummy input aiming to initialize Parameter of Liner/Policy/Value"
+    dummy_state = chainer.Variable(
+        np.zeros((1,obs_space_dim),dtype=np.float32)
+    )
+
+    with chainer.using_config('train',False),chainer.no_backprop_mode():
+        model.reset_state()
+        model.pi_and_v(dummy_state)
+        model.reset_state()
+
+    "check and initialize 'data' & 'grad', to aoid encountering a 'None' error when checking shared momeroy within A3C"
+    uninitialized = []
+    for name,param in model.namedparams():
+        if param.data is None:
+            uninitialized.append(name)
+        else:
+            param.grad = np.zeros_like(param.data)
+
+    if len(uninitialized) > 0:
+        raise RuntimeError("Uninitialized Chainer params before A3C:" + str(uninitialized))
+
     opt = rmsprop_async.RMSpropAsync(
         lr=7e-4, eps=1e-1, alpha=0.99)
     opt.setup(model)
