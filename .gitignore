@@ -1,3 +1,17 @@
 .DS_Store
 __pycache__/*
 slprj/*
+
+# Local Python environment
+.venv/
+
+# MATLAB / Simulink generated files
+*.slxc
+*.slx.r20*
+*.mexmaca64
+*.o
+
+# Temporary / backup files
+*_backup.*
+*.bak
+.DS_Store
