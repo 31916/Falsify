@@ -33,7 +33,7 @@ ARCH-COMP 2025 の対象7モデルについて、Falsifyで候補入力を生成
 
 全ケース結果内の `InputTraceFile` / `StateTraceFile` は、実行時に生成されたローカル証跡へのリポジトリ相対パスです。容量の大きい生トレースはGit管理せず、再実行時に再生成します。
 
-公式側で robustness が負となった要求違反候補は27件です。ただし、この結果は接続検証用の1 episode実行であり、発見率や速度などのアルゴリズム性能を示すものではありません。
+意味修正後の一括runで、公式側のrobustnessが負となった要求違反候補は15件です。ただし、この結果は接続検証用の1 episode実行であり、発見率や速度などのアルゴリズム性能を示すものではありません。
 
 ## ディレクトリ配置
 
@@ -58,6 +58,9 @@ MATLAB/
 | `FALSIFY_ARCH2025_CASE_FILTER` | CaseIDのワイルドカードフィルタ |
 | `FALSIFY_ARCH2025_RESUME_PASSED` | `0`で成功済みケースも再実行 |
 | `FALSIFY_ARCH2025_REBUILD_WRAPPERS` | `1`で生成ラッパーを再構築 |
+| `FALSIFY_ARCH2025_MAX_EPISODES` | 各ケースの最大episode数（正の整数） |
+| `FALSIFY_ARCH2025_SEED_OVERRIDE` | 全選択ケースで使うseed（未指定時はCaseIDごとの固定seed） |
+| `FALSIFY_ARCH2025_FINAL_SOURCE` | 公開用最終表へ採用する完全summary CSV |
 
 Python依存は [requirements-falsify.txt](requirements-falsify.txt) に記載しています。ローカル検証環境は MATLAB R2026a、Python 3.9.6、NumPy 1.23.5、Chainer 7.8.1、ChainerRL 0.8.0、Gym 0.22.0 です。
 
@@ -85,12 +88,32 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 
 中断後の再実行では、既定で `OverallPass=true` のケースをスキップします。分割実行結果を最終表へ組み立てる補助スクリプトは [assemble_arch2025_final_results.m](assemble_arch2025_final_results.m) です。
 
+完全な一括runを公開用 `results/arch2025/final` へ反映する場合は、次のようにsourceを明示します。
+
+```sh
+/Applications/MATLAB_R2026a.app/bin/matlab -batch "setenv('FALSIFY_ARCH2025_FINAL_SOURCE','results/arch2025/corrected_full188_20260902/arch2025_all_summary.csv'); assemble_arch2025_final_results"
+```
+
+## 小規模性能pilot
+
+[run_arch2025_rl_pilot.py](run_arch2025_rl_pilot.py) は同一のCaseID、algorithm群、seed群、episode予算を指定し、各runを公式モデル再生まで実行して集計します。既定値はCC3 Instance 2、RAND/A3C/ACER/DDQN、3 seed、最大30 episodeです。
+
+```sh
+.venv-falsify/bin/python run_arch2025_rl_pilot.py \
+  --case-prefix cc_cc3_i2 \
+  --algorithms RAND A3C ACER DDQN \
+  --seeds 20250903 20250904 20250905 \
+  --episodes 30
+```
+
+2026-09-02のpilotは12/12 runがVALIDATEDで、公式違反発見率はRAND 1/3、A3C 3/3、ACER 3/3、DDQN 3/3でした。これは3 seed・1要求だけの予備実験であり、統計的な性能優位を示すものではありません。特にDDQNの全成功は `replay_start_size=500` より前なので、現時点では学習効果ではなく探索効果を含む結果として扱います。詳細は [ゼミ報告](SEMINAR_2026-09-03.md) と [pilot集計](results/arch2025/pilot_cc3_i2_20260902/pilot_summary.csv) にあります。
+
 ## モデル固有の接続
 
 - SB: FalBenchGenの `s1`、`s3`、`s5`、`cc3`、`cc5` を接続し、4個の制御点を各6秒保持します。選択ネットワークは各仕様の `a2_k1_1_4_9_10_0.01_LSTM/*a2_k1_1.mat` です。
 - SC: 公式 `steamcondense_RNN_22.slx` の物理サブシステムをラッパーへ直接使用します。Instance 2は35秒を20等分した区分一定入力です。
 - F16: 時変入力ではなくroll・pitch・yawの初期条件を探索し、公式AeroBenchVVの非線形ODEを実行します。checkoutに不足するControl System Toolbox非依存の線形化構造体と、使用モードのautopilot command関数は `arch2025_compat/f16` に限定して補っています。
-- AT / AFC / CC / NN: 公式物理モデルを使う既存ラッパーに、Instanceごとの入力parameterization、ログ、公式再生adapterを追加しています。
+- AT / AFC / CC / NN: 公式物理モデルを使う既存ラッパーに、Instanceごとの入力parameterization、ログ、公式再生adapterを追加しています。AT/CCは生成時に公式solver設定をコピーします。NNの正規化状態は `[Ref-2, 0.4*Pos-1]` の順です。
 
 生成ラッパーのSimulinkバイナリはローカルパスを含み得るためGit管理せず、検証開始時に `arch2025_generated` へ構築します。
 
@@ -98,6 +121,6 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 
 最終判定は公式モデルを優先します。`OfficialRobustness < 0` を公式要求違反、`> 0` を要求成立として記録します。`FalsifyClassification` と `OfficialClassification` は `VIOLATED`、`SATISFIED`、`BOUNDARY` のいずれかです。
 
-`OverallPass` はFalsify完走、入力検査、公式再生、分類一致から決定します。数値軌道の一致は独立した診断列です。現在、`TrajectoryEquivalencePass` は5/188件のみで、残りには入力サンプリング、solver、logging、正規化等に由来する数値差があります。このため「公式判定一致」は確認済みですが、「全モデルで軌道が数値的に同一」とは主張しません。
+`OverallPass` はFalsify完走、入力検査、公式再生、分類一致から決定します。数値軌道の一致は独立した診断列です。意味修正後の一括runで、`TrajectoryEquivalencePass` は6/188件です。残りには入力サンプリング、solver、logging、正規化等に由来する数値差があります。このため「公式判定一致」は確認済みですが、「全モデルで軌道が数値的に同一」とは主張しません。
 
 PMはローカルcheckoutに公式pacemakerモデルがないため第一段階から除外しています。FIM、複数seed性能比較、他ツール比較にはまだ着手していません。

@@ -6,11 +6,14 @@ Algorithms: RAND, A3C, ACER, DDQN
 Budget: one Falsify episode per case
 PM: excluded because the official local model is unavailable
 
+Source summary file(s):
+  results/arch2025/corrected_full188_20260902/arch2025_all_summary.csv
+
 Validated: 188 / 188
 Official replay: 188 / 188
 Classification agreement: 188 / 188
-Official violations found: 27
-Trajectory diagnostics within tolerance: 5 / 188
+Official violations found: 15
+Trajectory diagnostics within tolerance: 6 / 188
 
 SB: 20 / 20 validated
 AT: 80 / 80 validated

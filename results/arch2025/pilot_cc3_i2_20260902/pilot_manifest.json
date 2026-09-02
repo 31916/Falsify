@@ -1,0 +1,22 @@
+{
+  "case_prefix": "cc_cc3_i2",
+  "algorithms": [
+    "RAND",
+    "A3C",
+    "ACER",
+    "DDQN"
+  ],
+  "seeds": [
+    20250903,
+    20250904,
+    20250905
+  ],
+  "max_episodes": 30,
+  "matlab": "/Applications/MATLAB_R2026a.app/bin/matlab",
+  "git_commit": "9ed78caa6647decfb7fdbe600f9ff6dc93837a52",
+  "git_worktree_dirty": true,
+  "started_at": "2026-09-02T22:27:31.490636+09:00",
+  "completed_at": "2026-09-02T22:39:21.018501+09:00",
+  "run_count": 12,
+  "validated_run_count": 12
+}

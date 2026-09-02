@@ -24,6 +24,11 @@ results/arch2025/final/*
 !results/arch2025/final/arch2025_status.csv
 !results/arch2025/final/arch2025_official_violations.csv
 !results/arch2025/final/arch2025_final_report.txt
+!results/arch2025/pilot_cc3_i2_20260902/
+results/arch2025/pilot_cc3_i2_20260902/*
+!results/arch2025/pilot_cc3_i2_20260902/pilot_manifest.json
+!results/arch2025/pilot_cc3_i2_20260902/pilot_runs.csv
+!results/arch2025/pilot_cc3_i2_20260902/pilot_summary.csv
 
 # Temporary / backup files
 *_backup.*
