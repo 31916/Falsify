@@ -4,12 +4,26 @@ slprj/*
 
 # Local Python environment
 .venv/
+.venv-falsify/
 
 # MATLAB / Simulink generated files
 *.slxc
 *.slx.r20*
 *.mexmaca64
 *.o
+**/slprj/
+arch2025_generated/*.slx
+arch2025_generated/*.mdl
+arch2025_generated/rl_agent_*_arch2025_pconst.m
+
+# Keep only the compact final ARCH-COMP evidence in Git.
+results/arch2025/*
+!results/arch2025/final/
+results/arch2025/final/*
+!results/arch2025/final/arch2025_all_summary.csv
+!results/arch2025/final/arch2025_status.csv
+!results/arch2025/final/arch2025_official_violations.csv
+!results/arch2025/final/arch2025_final_report.txt
 
 # Temporary / backup files
 *_backup.*

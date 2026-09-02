@@ -25,6 +25,12 @@ This package is for researchers and developers who evaluates the technology.
 - metascript_cars.m : a script for CARS model
 - metascript_wind_turbine.m : a script for the wind turbine model.
 
+## ARCH-COMP 2025 validation
+
+This branch adds a unified Falsify-to-official-model validation pipeline for SB, AT, AFC, CC, NN, F16, and SC. It runs RAND, A3C, ACER, and DDQN for one episode per applicable benchmark condition, validates the generated input, replays the same input on the official model, and records official STL robustness and classification agreement.
+
+The local validation result is 188/188 completed cases, including 27 candidates whose official robustness is negative. This is an integration run, not an algorithm-performance comparison. See [ARCH_COMP_2025.md](ARCH_COMP_2025.md) for setup, commands, scope, results, and the trajectory-equivalence caveat.
+
 
 ## License
 (C) 2019 National Institute of Advanced Industrial Science and Technology (AIST)

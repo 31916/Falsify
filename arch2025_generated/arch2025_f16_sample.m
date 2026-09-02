@@ -1,0 +1,67 @@
+function altitude = arch2025_f16_sample( ...
+        officialDirectory, compatibilityDirectory, initialAngles, ...
+        queryTime, stopTime)
+%ARCH2025_F16_SAMPLE Cache and sample an official nonlinear F-16 run.
+
+    persistent cachedAngles cachedOfficialDirectory
+    persistent cachedTime cachedAltitude lastQueryTime
+
+    initialAngles = double(initialAngles(:)');
+    queryTime = double(queryTime);
+    stopTime = double(stopTime);
+    officialDirectory = char(officialDirectory);
+    compatibilityDirectory = char(compatibilityDirectory);
+
+    newEpisode = isempty(cachedTime) || isempty(lastQueryTime) || ...
+        queryTime < lastQueryTime - 1.0e-9;
+    changedInput = isempty(cachedAngles) || ...
+        numel(cachedAngles) ~= numel(initialAngles) || ...
+        any(abs(cachedAngles - initialAngles) > 1.0e-12);
+    changedModel = isempty(cachedOfficialDirectory) || ...
+        ~strcmp(cachedOfficialDirectory, officialDirectory);
+
+    if newEpisode || changedInput || changedModel
+        assert(numel(initialAngles) == 3, ...
+            'F16 initial action must be [roll pitch yaw].');
+        assert(isfolder(officialDirectory), ...
+            'Official F16 directory was not found: %s', officialDirectory);
+        assert(isfolder(compatibilityDirectory), ...
+            'F16 compatibility directory was not found: %s', ...
+            compatibilityDirectory);
+
+        previousDirectory = pwd;
+        directoryCleanup = onCleanup(@() cd(previousDirectory));
+        warningState = warning;
+        warningCleanup = onCleanup(@() warning(warningState));
+        warning('off', 'all');
+
+        cd(officialDirectory);
+        addpath(genpath(fullfile(officialDirectory, ...
+            'AeroBenchVV-develop')), '-begin');
+        addpath(officialDirectory, '-begin');
+        addpath(compatibilityDirectory, '-begin');
+        rehash path;
+
+        [traceTime, traceAltitude] = run_f16( ...
+            4040, ...
+            540, ...
+            initialAngles(1), ...
+            initialAngles(2), ...
+            initialAngles(3), ...
+            stopTime);
+
+        cachedAngles = initialAngles;
+        cachedOfficialDirectory = officialDirectory;
+        cachedTime = double(traceTime(:));
+        cachedAltitude = double(traceAltitude(:));
+
+        assert(numel(cachedTime) == numel(cachedAltitude), ...
+            'Official F16 time and altitude sizes differ.');
+        assert(abs(cachedTime(end) - stopTime) <= 1.0e-9, ...
+            'Official F16 trace did not reach the requested stop time.');
+    end
+
+    altitude = interp1( ...
+        cachedTime, cachedAltitude, queryTime, 'linear', 'extrap');
+    lastQueryTime = queryTime;
+end

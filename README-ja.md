@@ -30,6 +30,17 @@
 - metascript_cars.m : CARSモデル用のスクリプト
 - metascript_wind_turbine.m : 風力タービンモデルのスクリプト
 
+## ARCH-COMP 2025 統合検証
+
+SB・AT・AFC・CC・NN・F16・SC の47条件に対し、RAND・A3C・ACER・DDQNを1 episodeずつ実行する統合検証を追加しました。候補入力の値域／構造検査、同一入力による公式モデル再生、公式STL robustness、判定一致までを記録します。
+
+ローカル実行結果は188/188ケースが検証完了、公式モデルでも要求違反となったケースは27件です。これは1 episodeの接続確認であり、アルゴリズム性能比較ではありません。実行方法、対象条件、外部モデル配置、既知の軌道診断差は [ARCH_COMP_2025.md](ARCH_COMP_2025.md) を参照してください。
+
+- [全188件の結果](results/arch2025/final/arch2025_all_summary.csv)
+- [工程別ステータス](results/arch2025/final/arch2025_status.csv)
+- [公式モデルで確認した要求違反27件](results/arch2025/final/arch2025_official_violations.csv)
+- [最終集計](results/arch2025/final/arch2025_final_report.txt)
+
 
 ## 実行例
 ### 準備

@@ -1,0 +1,16 @@
+cached-property==1.5.2
+chainer==7.8.1
+chainerrl==0.8.0
+cloudpickle==3.1.2
+filelock==3.19.1
+future==1.0.0
+gym==0.22.0
+gym-notices==0.1.0
+importlib_metadata==8.7.1
+numpy==1.23.5
+Pillow==9.5.0
+protobuf==3.20.3
+scipy==1.10.1
+six==1.17.0
+typing_extensions==4.16.0
+zipp==3.23.1
