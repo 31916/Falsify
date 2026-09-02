@@ -60,6 +60,7 @@ MATLAB/
 | `FALSIFY_ARCH2025_REBUILD_WRAPPERS` | `1`で生成ラッパーを再構築 |
 | `FALSIFY_ARCH2025_MAX_EPISODES` | 各ケースの最大episode数（正の整数） |
 | `FALSIFY_ARCH2025_SEED_OVERRIDE` | 全選択ケースで使うseed（未指定時はCaseIDごとの固定seed） |
+| `FALSIFY_ARCH2025_STOP_ON_VIOLATION` | `0`で負のFalsify robustness後も固定episode予算を完走 |
 | `FALSIFY_ARCH2025_FINAL_SOURCE` | 公開用最終表へ採用する完全summary CSV |
 | `FALSIFY_ARCH2025_DEBUG_RAW_ACTION` | `1`で重複除去・補間前の生ActionOut traceも保存 |
 

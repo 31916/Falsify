@@ -144,6 +144,7 @@ algorithms = [
 maxEpisodes = 1;
 baseSeed = 20250730;
 seedOverride = NaN;
+stopOnViolation = true;
 traceStep = 0.01;
 
 maxEpisodesSetting = strtrim(string( ...
@@ -172,6 +173,16 @@ if strlength(seedOverrideSetting) > 0
         ['FALSIFY_ARCH2025_SEED_OVERRIDE must be an integer ' ...
          'between 0 and intmax(''int32'').']);
     seedOverride = configuredSeed;
+end
+
+stopOnViolationSetting = strtrim(string( ...
+    getenv('FALSIFY_ARCH2025_STOP_ON_VIOLATION') ...
+));
+
+if strlength(stopOnViolationSetting) > 0
+    assert(ismember(stopOnViolationSetting, ["0", "1"]), ...
+        'FALSIFY_ARCH2025_STOP_ON_VIOLATION must be 0 or 1.');
+    stopOnViolation = stopOnViolationSetting == "1";
 end
 
 inputTolerance = 1.0e-9;
@@ -245,6 +256,7 @@ settings.ResultsDirectory = resultsDirectory;
 settings.CaseTraceDirectory = caseTraceDirectory;
 
 settings.MaxEpisodes = maxEpisodes;
+settings.StopOnViolation = stopOnViolation;
 settings.BaseSeed = baseSeed;
 settings.TraceStep = traceStep;
 
@@ -324,6 +336,12 @@ fprintf('============================================================\n\n');
 fprintf('Cases:              %d\n', numel(cases));
 fprintf('Algorithms:         RAND, A3C, ACER, DDQN\n');
 fprintf('Episodes per case:  %d\n', maxEpisodes);
+if stopOnViolation
+    stopOnViolationText = 'enabled';
+else
+    stopOnViolationText = 'disabled (fixed budget)';
+end
+fprintf('Stop on violation:  %s\n', stopOnViolationText);
 fprintf('Official grid:      %.2f seconds\n', traceStep);
 
 if isfinite(seedOverride)
@@ -1723,6 +1741,7 @@ function config = makeFalsifyConfig_(currentCase, settings)
     config = struct();
 
     config.maxEpisodes = settings.MaxEpisodes;
+    config.stopOnViolation = settings.StopOnViolation;
     config.useModelSolverSettings = true;
     config.agentName = char(currentCase.AgentName);
 

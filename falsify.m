@@ -173,7 +173,10 @@ function [numEpisode, elapsedTime, bestRob, bestXout, bestYout] = falsify(config
             bestRob = rob;
             bestYout = yout;
             bestXout = xout;
-            if rob < 0
+            stopOnViolation = ...
+                ~isfield(config, 'stopOnViolation') || ...
+                config.stopOnViolation;
+            if rob < 0 && stopOnViolation
                 break;
             end
         end

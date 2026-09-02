@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Run and aggregate a small, reproducible ARCH-COMP 2025 RL pilot.
+"""Run and aggregate a reproducible ARCH-COMP 2025 RL experiment.
 
 The default experiment compares RAND, A3C, ACER, and DDQN on CC3
-Instance 2 with the same three random seeds and at most 30 episodes.
+Instance 2 with common random seeds and at most 30 episodes. Pass
+--fixed-budget to run every requested episode for an unbiased comparison.
 Each run is delegated to validate_arch2025_all.m so input validation,
 official-model replay, and STL robustness calculation stay identical to
 the unified 188-case pipeline.
@@ -64,6 +65,11 @@ def parse_args() -> argparse.Namespace:
         "--rebuild-wrappers",
         action="store_true",
         help="Rebuild generated wrappers before the first executed run.",
+    )
+    parser.add_argument(
+        "--fixed-budget",
+        action="store_true",
+        help="Run every requested episode even after Falsify becomes negative.",
     )
     args = parser.parse_args()
     if args.episodes < 1:
@@ -152,48 +158,65 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def aggregate(rows: list[dict[str, object]], algorithms: list[str]) -> list[dict[str, object]]:
+def aggregate(
+    rows: list[dict[str, object]],
+    algorithms: list[str],
+    fixed_budget: bool,
+) -> list[dict[str, object]]:
     summary: list[dict[str, object]] = []
     for algorithm in algorithms:
         selected = [row for row in rows if row["Algorithm"] == algorithm]
-        valid = [
+        pipeline_valid = [
             row
             for row in selected
-            if row["Status"] == "VALIDATED"
-            and row["OverallPass"]
+            if row["FalsifyRunPass"]
+            and row["InputPass"]
+            and row["OfficialReplayPass"]
             and row["MatlabReturnCode"] == 0
         ]
         violations = [
-            row for row in valid if row["OfficialClassification"] == "VIOLATED"
+            row
+            for row in pipeline_valid
+            if row["OfficialClassification"] == "VIOLATED"
         ]
-        rate_low, rate_high = wilson_interval(len(violations), len(valid))
+        rate_low, rate_high = wilson_interval(
+            len(violations), len(pipeline_valid)
+        )
         episode_q1, episode_q3 = quartiles_or_nan(
-            [float(row["Episodes"]) for row in valid]
+            [float(row["Episodes"]) for row in pipeline_valid]
         )
         seconds_q1, seconds_q3 = quartiles_or_nan(
-            [float(row["FalsifyElapsedSeconds"]) for row in valid]
+            [float(row["FalsifyElapsedSeconds"]) for row in pipeline_valid]
         )
         summary.append(
             {
                 "Algorithm": algorithm,
                 "Runs": len(selected),
-                "ValidatedRuns": len(valid),
+                "PipelineValidRuns": len(pipeline_valid),
+                "ClassificationAgreementRuns": sum(
+                    row["ClassificationAgreementPass"]
+                    for row in pipeline_valid
+                ),
                 "OfficialViolations": len(violations),
                 "OfficialViolationRate": (
-                    len(violations) / len(valid) if valid else float("nan")
+                    len(violations) / len(pipeline_valid)
+                    if pipeline_valid
+                    else float("nan")
                 ),
                 "OfficialViolationRateCI95Low": rate_low,
                 "OfficialViolationRateCI95High": rate_high,
                 "MedianEpisodesAll": median_or_nan(
-                    [float(row["Episodes"]) for row in valid]
+                    [float(row["Episodes"]) for row in pipeline_valid]
                 ),
                 "EpisodeQ1": episode_q1,
                 "EpisodeQ3": episode_q3,
                 "MedianEpisodesToViolation": median_or_nan(
-                    [float(row["Episodes"]) for row in violations]
+                    []
+                    if fixed_budget
+                    else [float(row["Episodes"]) for row in violations]
                 ),
                 "MedianFalsifySeconds": median_or_nan(
-                    [float(row["FalsifyElapsedSeconds"]) for row in valid]
+                    [float(row["FalsifyElapsedSeconds"]) for row in pipeline_valid]
                 ),
                 "FalsifySecondsQ1": seconds_q1,
                 "FalsifySecondsQ3": seconds_q3,
@@ -201,7 +224,7 @@ def aggregate(rows: list[dict[str, object]], algorithms: list[str]) -> list[dict
                     [float(row["WallSeconds"]) for row in selected]
                 ),
                 "MedianOfficialRobustness": median_or_nan(
-                    [float(row["OfficialRobustness"]) for row in valid]
+                    [float(row["OfficialRobustness"]) for row in pipeline_valid]
                 ),
             }
         )
@@ -260,6 +283,7 @@ def main() -> int:
         "git_dirty_entries": git_status,
         "source_sha256": source_sha256,
         "rebuild_wrappers_before_first_run": args.rebuild_wrappers,
+        "fixed_episode_budget": args.fixed_budget,
         "started_at": datetime.now().astimezone().isoformat(),
     }
     (output_root / "pilot_manifest.json").write_text(
@@ -298,6 +322,8 @@ def main() -> int:
                 "FALSIFY_ARCH2025_SEED_OVERRIDE": str(seed),
                 "FALSIFY_ARCH2025_OUTPUT_DIR": str(run_directory),
             }
+            if args.fixed_budget:
+                settings["FALSIFY_ARCH2025_STOP_ON_VIOLATION"] = "0"
             if args.rebuild_wrappers and run_index == 1:
                 settings["FALSIFY_ARCH2025_REBUILD_WRAPPERS"] = "1"
             expression = "; ".join(
@@ -337,6 +363,14 @@ def main() -> int:
                 "OfficialClassification": source.get(
                     "OfficialClassification", ""
                 ),
+                "FalsifyRunPass": bool_text(source.get("FalsifyRunPass")),
+                "InputPass": bool_text(source.get("InputPass")),
+                "OfficialReplayPass": bool_text(
+                    source.get("OfficialReplayPass")
+                ),
+                "ClassificationAgreementPass": bool_text(
+                    source.get("ClassificationAgreementPass")
+                ),
                 "OverallPass": bool_text(source.get("OverallPass")),
                 "TrajectoryEquivalencePass": bool_text(
                     source.get("TrajectoryEquivalencePass")
@@ -358,6 +392,10 @@ def main() -> int:
                 "FalsifyRobustness": float("nan"),
                 "OfficialRobustness": float("nan"),
                 "OfficialClassification": "",
+                "FalsifyRunPass": False,
+                "InputPass": False,
+                "OfficialReplayPass": False,
+                "ClassificationAgreementPass": False,
                 "OverallPass": False,
                 "TrajectoryEquivalencePass": False,
                 "MatlabReturnCode": return_code,
@@ -368,12 +406,19 @@ def main() -> int:
         rows.append(row)
         write_csv(output_root / "pilot_runs.csv", rows)
 
-    summary = aggregate(rows, args.algorithms)
+    summary = aggregate(rows, args.algorithms, args.fixed_budget)
     write_csv(output_root / "pilot_summary.csv", summary)
     manifest["completed_at"] = datetime.now().astimezone().isoformat()
     manifest["run_count"] = len(rows)
-    manifest["validated_run_count"] = sum(
-        row["Status"] == "VALIDATED" for row in rows
+    manifest["pipeline_valid_run_count"] = sum(
+        row["FalsifyRunPass"]
+        and row["InputPass"]
+        and row["OfficialReplayPass"]
+        and row["MatlabReturnCode"] == 0
+        for row in rows
+    )
+    manifest["classification_agreement_run_count"] = sum(
+        row["ClassificationAgreementPass"] for row in rows
     )
     (output_root / "pilot_manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
@@ -383,8 +428,9 @@ def main() -> int:
     print(f"Run table: {output_root / 'pilot_runs.csv'}")
     print(f"Summary:   {output_root / 'pilot_summary.csv'}")
     return 0 if all(
-        row["Status"] == "VALIDATED"
-        and row["OverallPass"]
+        row["FalsifyRunPass"]
+        and row["InputPass"]
+        and row["OfficialReplayPass"]
         and row["MatlabReturnCode"] == 0
         for row in rows
     ) else 1
