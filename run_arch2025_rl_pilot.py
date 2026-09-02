@@ -12,7 +12,9 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
+import math
 import statistics
 import subprocess
 import sys
@@ -58,6 +60,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Re-run combinations whose result CSV already exists.",
     )
+    parser.add_argument(
+        "--rebuild-wrappers",
+        action="store_true",
+        help="Rebuild generated wrappers before the first executed run.",
+    )
     args = parser.parse_args()
     if args.episodes < 1:
         parser.error("--episodes must be at least 1")
@@ -96,6 +103,34 @@ def median_or_nan(values: list[float]) -> float:
     return statistics.median(finite) if finite else float("nan")
 
 
+def quartiles_or_nan(values: list[float]) -> tuple[float, float]:
+    finite = sorted(value for value in values if value == value)
+    if not finite:
+        return float("nan"), float("nan")
+    if len(finite) == 1:
+        return finite[0], finite[0]
+    quartiles = statistics.quantiles(finite, n=4, method="inclusive")
+    return quartiles[0], quartiles[2]
+
+
+def wilson_interval(successes: int, trials: int) -> tuple[float, float]:
+    if trials == 0:
+        return float("nan"), float("nan")
+    z = 1.959963984540054
+    proportion = successes / trials
+    denominator = 1 + z**2 / trials
+    center = (proportion + z**2 / (2 * trials)) / denominator
+    radius = (
+        z
+        * math.sqrt(
+            proportion * (1 - proportion) / trials
+            + z**2 / (4 * trials**2)
+        )
+        / denominator
+    )
+    return max(0.0, center - radius), min(1.0, center + radius)
+
+
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
     if not rows:
         return
@@ -109,14 +144,35 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         writer.writerows(rows)
 
 
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def aggregate(rows: list[dict[str, object]], algorithms: list[str]) -> list[dict[str, object]]:
     summary: list[dict[str, object]] = []
     for algorithm in algorithms:
         selected = [row for row in rows if row["Algorithm"] == algorithm]
-        valid = [row for row in selected if row["Status"] == "VALIDATED"]
+        valid = [
+            row
+            for row in selected
+            if row["Status"] == "VALIDATED"
+            and row["OverallPass"]
+            and row["MatlabReturnCode"] == 0
+        ]
         violations = [
             row for row in valid if row["OfficialClassification"] == "VIOLATED"
         ]
+        rate_low, rate_high = wilson_interval(len(violations), len(valid))
+        episode_q1, episode_q3 = quartiles_or_nan(
+            [float(row["Episodes"]) for row in valid]
+        )
+        seconds_q1, seconds_q3 = quartiles_or_nan(
+            [float(row["FalsifyElapsedSeconds"]) for row in valid]
+        )
         summary.append(
             {
                 "Algorithm": algorithm,
@@ -126,15 +182,21 @@ def aggregate(rows: list[dict[str, object]], algorithms: list[str]) -> list[dict
                 "OfficialViolationRate": (
                     len(violations) / len(valid) if valid else float("nan")
                 ),
+                "OfficialViolationRateCI95Low": rate_low,
+                "OfficialViolationRateCI95High": rate_high,
                 "MedianEpisodesAll": median_or_nan(
                     [float(row["Episodes"]) for row in valid]
                 ),
+                "EpisodeQ1": episode_q1,
+                "EpisodeQ3": episode_q3,
                 "MedianEpisodesToViolation": median_or_nan(
                     [float(row["Episodes"]) for row in violations]
                 ),
                 "MedianFalsifySeconds": median_or_nan(
                     [float(row["FalsifyElapsedSeconds"]) for row in valid]
                 ),
+                "FalsifySecondsQ1": seconds_q1,
+                "FalsifySecondsQ3": seconds_q3,
                 "MedianWallSeconds": median_or_nan(
                     [float(row["WallSeconds"]) for row in selected]
                 ),
@@ -169,15 +231,23 @@ def main() -> int:
         capture_output=True,
         text=True,
     ).stdout.strip()
-    git_dirty = bool(
-        subprocess.run(
-            ["git", "status", "--porcelain"],
-            cwd=repo,
-            check=False,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-    )
+    git_status = subprocess.run(
+        ["git", "status", "--porcelain"],
+        cwd=repo,
+        check=False,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+    source_files = [
+        "driver.py",
+        "falsify.m",
+        "validate_arch2025_all.m",
+        Path(__file__).name,
+    ]
+    source_sha256 = {
+        source_file: sha256_file(repo / source_file)
+        for source_file in source_files
+    }
 
     manifest = {
         "case_prefix": args.case_prefix,
@@ -186,7 +256,10 @@ def main() -> int:
         "max_episodes": args.episodes,
         "matlab": str(matlab),
         "git_commit": git_commit,
-        "git_worktree_dirty": git_dirty,
+        "git_worktree_dirty": bool(git_status),
+        "git_dirty_entries": git_status,
+        "source_sha256": source_sha256,
+        "rebuild_wrappers_before_first_run": args.rebuild_wrappers,
         "started_at": datetime.now().astimezone().isoformat(),
     }
     (output_root / "pilot_manifest.json").write_text(
@@ -225,6 +298,8 @@ def main() -> int:
                 "FALSIFY_ARCH2025_SEED_OVERRIDE": str(seed),
                 "FALSIFY_ARCH2025_OUTPUT_DIR": str(run_directory),
             }
+            if args.rebuild_wrappers and run_index == 1:
+                settings["FALSIFY_ARCH2025_REBUILD_WRAPPERS"] = "1"
             expression = "; ".join(
                 f"setenv({matlab_string(name)},{matlab_string(value)})"
                 for name, value in settings.items()
@@ -307,7 +382,12 @@ def main() -> int:
 
     print(f"Run table: {output_root / 'pilot_runs.csv'}")
     print(f"Summary:   {output_root / 'pilot_summary.csv'}")
-    return 0 if all(row["Status"] == "VALIDATED" for row in rows) else 1
+    return 0 if all(
+        row["Status"] == "VALIDATED"
+        and row["OverallPass"]
+        and row["MatlabReturnCode"] == 0
+        for row in rows
+    ) else 1
 
 
 if __name__ == "__main__":
