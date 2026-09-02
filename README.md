@@ -29,7 +29,7 @@ This package is for researchers and developers who evaluates the technology.
 
 This branch adds a unified Falsify-to-official-model validation pipeline for SB, AT, AFC, CC, NN, F16, and SC. It runs RAND, A3C, ACER, and DDQN for one episode per applicable benchmark condition, validates the generated input, replays the same input on the official model, and records official STL robustness and classification agreement.
 
-The local validation result is 188/188 completed cases, including 27 candidates whose official robustness is negative. This is an integration run, not an algorithm-performance comparison. See [ARCH_COMP_2025.md](ARCH_COMP_2025.md) for setup, commands, scope, results, and the trajectory-equivalence caveat.
+The semantics-corrected local validation completed 188/188 cases, including 15 candidates whose official robustness is negative. That one-episode run validates the integration rather than algorithm performance. A separate CC3 Instance 2 experiment completed 80/80 official replays using four algorithms, 20 matched seeds, and a fixed 30-episode budget. See [ARCH_COMP_2025.md](ARCH_COMP_2025.md) for setup, commands, results, statistical summaries, and the trajectory-equivalence caveat.
 
 
 ## License

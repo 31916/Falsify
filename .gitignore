@@ -29,6 +29,13 @@ results/arch2025/pilot_cc3_i2_20260902/*
 !results/arch2025/pilot_cc3_i2_20260902/pilot_manifest.json
 !results/arch2025/pilot_cc3_i2_20260902/pilot_runs.csv
 !results/arch2025/pilot_cc3_i2_20260902/pilot_summary.csv
+!results/arch2025/cc3_i2_fixed30_20seed_20260903/
+results/arch2025/cc3_i2_fixed30_20seed_20260903/*
+!results/arch2025/cc3_i2_fixed30_20seed_20260903/pilot_manifest.json
+!results/arch2025/cc3_i2_fixed30_20seed_20260903/pilot_runs.csv
+!results/arch2025/cc3_i2_fixed30_20seed_20260903/pilot_summary.csv
+!results/arch2025/cc3_i2_fixed30_20seed_20260903/pairwise_vs_rand.csv
+!results/arch2025/cc3_i2_fixed30_20seed_20260903/official_violation_rate.png
 
 # Temporary / backup files
 *_backup.*

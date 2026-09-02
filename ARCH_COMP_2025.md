@@ -35,6 +35,8 @@ ARCH-COMP 2025 の対象7モデルについて、Falsifyで候補入力を生成
 
 意味修正後の一括runで、公式側のrobustnessが負となった要求違反候補は15件です。ただし、この結果は接続検証用の1 episode実行であり、発見率や速度などのアルゴリズム性能を示すものではありません。
 
+CC3 Instance 2では、4手法・共通20 seed・各30 episodeの固定予算性能実験も完走しました。80/80 runで入力検査と公式モデル再生に成功し、公式違反発見率はRAND 12/20、A3C 20/20、ACER 20/20、DDQN 13/20でした。この結果はCC3 Instance 2に限定した比較であり、全ベンチマークへの一般化はしていません。
+
 ## ディレクトリ配置
 
 公式モデルはFalsifyリポジトリへコピーせず、隣接ディレクトリで管理します。既定配置は次のとおりです。
@@ -96,7 +98,7 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 /Applications/MATLAB_R2026a.app/bin/matlab -batch "setenv('FALSIFY_ARCH2025_FINAL_SOURCE','results/arch2025/corrected_full188_20260902/arch2025_all_summary.csv'); assemble_arch2025_final_results"
 ```
 
-## 小規模性能pilot
+## RL性能実験
 
 [run_arch2025_rl_pilot.py](run_arch2025_rl_pilot.py) は同一のCaseID、algorithm群、seed群、episode予算を指定し、各runを公式モデル再生まで実行して集計します。既定値はCC3 Instance 2、RAND/A3C/ACER/DDQN、3 seed、最大30 episodeです。
 
@@ -109,6 +111,39 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 ```
 
 2026-09-02のpilotは12/12 runがVALIDATEDで、公式違反発見率はRAND 1/3、A3C 3/3、ACER 3/3、DDQN 3/3でした。これは3 seed・1要求だけの予備実験であり、統計的な性能優位を示すものではありません。特にDDQNの全成功は `replay_start_size=500` より前なので、現時点では学習効果ではなく探索効果を含む結果として扱います。詳細は [ゼミ報告](SEMINAR_2026-09-03.md) と [pilot集計](results/arch2025/pilot_cc3_i2_20260902/pilot_summary.csv) にあります。
+
+### 固定予算20-seed実験
+
+早期停止pilotでは、Falsifyラッパーの可変ステップ数値差による浅い負値で探索が止まる場合があり、手法ごとのsimulation予算も揃いませんでした。そこで `--fixed-budget` を追加し、途中のFalsify robustnessに関係なく全手法で30 episodeを実行してから、保存された最良入力を公式モデルへ再投入する設計へ変更しました。
+
+```sh
+.venv-falsify/bin/python run_arch2025_rl_pilot.py \
+  --case-prefix cc_cc3_i2 \
+  --algorithms RAND A3C ACER DDQN \
+  --seeds 20251001 20251002 20251003 20251004 20251005 \
+          20251006 20251007 20251008 20251009 20251010 \
+          20251011 20251012 20251013 20251014 20251015 \
+          20251016 20251017 20251018 20251019 20251020 \
+  --episodes 30 \
+  --fixed-budget \
+  --rebuild-wrappers \
+  --output-root results/arch2025/cc3_i2_fixed30_20seed_20260903
+```
+
+| Algorithm | 有効run | 公式違反 | 発見率 | Wilson 95% CI | Falsify時間中央値 | 公式robustness中央値 |
+|---|---:|---:|---:|---:|---:|---:|
+| RAND | 20/20 | 12/20 | 60% | 38.7–78.1% | 56.96秒 | -0.203 |
+| A3C | 20/20 | 20/20 | 100% | 83.9–100% | 81.32秒 | -3.120 |
+| ACER | 20/20 | 20/20 | 100% | 83.9–100% | 60.22秒 | -4.781 |
+| DDQN | 20/20 | 13/20 | 65% | 43.3–81.9% | 79.77秒 | -4.429 |
+
+共通seedを対応付けた正確McNemar検定では、RANDとの差はA3CとACERでそれぞれ未補正 `p=0.0078125`、3比較のHolm補正後 `p=0.0234375`、DDQNでは `p=1.0` でした。この1要求・20 seedの範囲ではA3C/ACERの発見率がRANDより高いという結果ですが、他要求でも再現するかは未確認です。DDQNは約600遷移の後半で `replay_start_size=500` に到達するため学習は開始しますが、学習区間は短く、収束済みとは主張しません。
+
+- [実行manifest](results/arch2025/cc3_i2_fixed30_20seed_20260903/pilot_manifest.json)
+- [80 runの結果](results/arch2025/cc3_i2_fixed30_20seed_20260903/pilot_runs.csv)
+- [手法別集計](results/arch2025/cc3_i2_fixed30_20seed_20260903/pilot_summary.csv)
+- [RANDとの対応比較](results/arch2025/cc3_i2_fixed30_20seed_20260903/pairwise_vs_rand.csv)
+- [95%信頼区間付き図](results/arch2025/cc3_i2_fixed30_20seed_20260903/official_violation_rate.png)
 
 ## モデル固有の接続
 
@@ -125,4 +160,4 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 
 `OverallPass` はFalsify完走、入力検査、公式再生、分類一致から決定します。数値軌道の一致は独立した診断列です。意味修正後の一括runで、`TrajectoryEquivalencePass` は6/188件です。CCでは同一入力による公式モデルとFalsify基礎モデルの誤差が`1.1e-13`以下で、wrapperと公式モデルを固定ステップ`ode4, 0.01秒`へ揃えた診断では誤差`0`でした。通常runの残差はonline monitor等が可変ステップsolverの積分経路を変えるためであり、正式判定では公式runnerの軌道を優先します。このため「公式判定一致」と物理モデルの動的一致は確認済みですが、「通常の可変ステップ実行で全軌道が数値的に同一」とは主張しません。
 
-PMはローカルcheckoutに公式pacemakerモデルがないため第一段階から除外しています。FIM、複数seed性能比較、他ツール比較にはまだ着手していません。
+PMはローカルcheckoutに公式pacemakerモデルがないため第一段階から除外しています。複数seed性能比較はCC3 Instance 2で完了しました。他要求への性能実験展開、FIM、他ツール比較にはまだ着手していません。

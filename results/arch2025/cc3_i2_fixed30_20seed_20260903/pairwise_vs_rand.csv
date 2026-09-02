@@ -1,0 +1,4 @@
+Algorithm,Baseline,MatchedSeeds,BothViolated,AlgorithmOnlyViolated,BaselineOnlyViolated,NeitherViolated,ExactMcNemarP,HolmAdjustedP
+A3C,RAND,20,12,8,0,0,0.0078125,0.0234375
+ACER,RAND,20,12,8,0,0,0.0078125,0.0234375
+DDQN,RAND,20,7,6,5,2,1.0,1.0
