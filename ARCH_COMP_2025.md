@@ -61,6 +61,7 @@ MATLAB/
 | `FALSIFY_ARCH2025_MAX_EPISODES` | 各ケースの最大episode数（正の整数） |
 | `FALSIFY_ARCH2025_SEED_OVERRIDE` | 全選択ケースで使うseed（未指定時はCaseIDごとの固定seed） |
 | `FALSIFY_ARCH2025_FINAL_SOURCE` | 公開用最終表へ採用する完全summary CSV |
+| `FALSIFY_ARCH2025_DEBUG_RAW_ACTION` | `1`で重複除去・補間前の生ActionOut traceも保存 |
 
 Python依存は [requirements-falsify.txt](requirements-falsify.txt) に記載しています。ローカル検証環境は MATLAB R2026a、Python 3.9.6、NumPy 1.23.5、Chainer 7.8.1、ChainerRL 0.8.0、Gym 0.22.0 です。
 
@@ -121,6 +122,6 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 
 最終判定は公式モデルを優先します。`OfficialRobustness < 0` を公式要求違反、`> 0` を要求成立として記録します。`FalsifyClassification` と `OfficialClassification` は `VIOLATED`、`SATISFIED`、`BOUNDARY` のいずれかです。
 
-`OverallPass` はFalsify完走、入力検査、公式再生、分類一致から決定します。数値軌道の一致は独立した診断列です。意味修正後の一括runで、`TrajectoryEquivalencePass` は6/188件です。残りには入力サンプリング、solver、logging、正規化等に由来する数値差があります。このため「公式判定一致」は確認済みですが、「全モデルで軌道が数値的に同一」とは主張しません。
+`OverallPass` はFalsify完走、入力検査、公式再生、分類一致から決定します。数値軌道の一致は独立した診断列です。意味修正後の一括runで、`TrajectoryEquivalencePass` は6/188件です。CCでは同一入力による公式モデルとFalsify基礎モデルの誤差が`1.1e-13`以下で、wrapperと公式モデルを固定ステップ`ode4, 0.01秒`へ揃えた診断では誤差`0`でした。通常runの残差はonline monitor等が可変ステップsolverの積分経路を変えるためであり、正式判定では公式runnerの軌道を優先します。このため「公式判定一致」と物理モデルの動的一致は確認済みですが、「通常の可変ステップ実行で全軌道が数値的に同一」とは主張しません。
 
 PMはローカルcheckoutに公式pacemakerモデルがないため第一段階から除外しています。FIM、複数seed性能比較、他ツール比較にはまだ着手していません。
