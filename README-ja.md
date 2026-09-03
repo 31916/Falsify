@@ -47,8 +47,8 @@ SB・AT・AFC・CC・NN・F16・SC の47条件に対し、RAND・A3C・ACER・DD
 - 作業ディレクトリにPython仮想環境を構築
 >詳しくは[Python virtual environments with MATLAB](https://jp.mathworks.com/matlabcentral/answers/1750425-python-virtual-environments-with-matlab)を参照
 
-- `falsify-data`フォルダーに`sldemo_autotrans_data`を追加
->`sldemo_autotrans_data`については[こちら](https://jp.mathworks.com/help/simulink/slref/modeling-an-automatic-transmission-controller.html)を参照
+- ATを実行する場合は、MathWorksの例題に含まれる `sldemo_autotrans_data.mat` を用意
+>自動検出されない場合は、環境変数 `FALSIFY_ARCH2025_AT_DATA` にファイルまたは格納ディレクトリの絶対パスを指定します。[MathWorksの説明](https://jp.mathworks.com/help/simulink/slref/modeling-an-automatic-transmission-controller.html)も参照してください。このデータは本リポジトリでは再配布しません。
 
 ### 実行
 "Configuration" という名前のセクションを編集、スクリプトを実行

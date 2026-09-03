@@ -218,6 +218,11 @@ bdclose('all');
 
 restorePaths_(repoDirectory, generatedDirectory);
 
+atDataFile = locateArch2025AtData_();
+if isfile(atDataFile)
+    addpath(fileparts(atDataFile), '-begin');
+end
+
 preparePython_(pythonExecutable, repoDirectory);
 
 % =========================================================
@@ -243,6 +248,7 @@ settings.FalBenchRootDirectory = falBenchRootDirectory;
 settings.GeneratedDirectory = generatedDirectory;
 settings.ResultsDirectory = resultsDirectory;
 settings.CaseTraceDirectory = caseTraceDirectory;
+settings.AtDataFile = atDataFile;
 
 settings.MaxEpisodes = maxEpisodes;
 settings.BaseSeed = baseSeed;
@@ -339,6 +345,15 @@ else
 end
 
 fprintf('Results directory:\n%s\n\n', resultsDirectory);
+
+if isfile(atDataFile)
+    fprintf('AT support data:\n%s\n\n', atDataFile);
+else
+    fprintf([ ...
+        'AT support data:   not found ' ...
+        '(non-AT cases may still run)\n\n' ...
+    ]);
+end
 
 fprintf('Generated/reused wrappers:\n');
 disp(struct2table(wrapperCatalog));
@@ -526,6 +541,8 @@ function result = runOneCase_( ...
     result.Algorithm = currentCase.Algorithm;
     result.Seed = seed;
     result.Status = "RUNNING";
+
+    prepareArch2025AtCase_(currentCase, settings);
 
     config = makeFalsifyConfig_(currentCase, settings);
 
@@ -2169,9 +2186,8 @@ function [officialTime, ...
             end
 
         case "NN"
-            if exist('init_neural', 'file') == 2
-                init_neural;
-            end
+            % The compatibility replay below initializes u_ts in the
+            % base workspace and supplies a column-oriented time vector.
 
         case "CC"
             % Nothing to initialize.
@@ -2212,6 +2228,37 @@ function [officialTime, ...
             currentCase.StopTime ...
         );
 
+    elseif currentCase.Model == "NN"
+
+        % ARCH-COMP's run_neural helper constructs a row time vector and
+        % concatenates it with column input data.  MATLAB R2026a rejects
+        % that shape mismatch.  Reproduce the helper's intended replay
+        % without modifying the official checkout.
+        neuralTime = (0:0.01:currentCase.StopTime)';
+        neuralData = interp1( ...
+            inputTime, inputData, neuralTime, 'previous');
+        neuralInput = [neuralTime, neuralData];
+
+        assignin('base', 'u_ts', 0.001);
+        assignin('base', 'u', neuralInput);
+        assignin('base', 'T', currentCase.StopTime);
+
+        load_system(fullfile( ...
+            officialDirectory, 'narmamaglev_v1.slx'));
+        simulationResult = sim( ...
+            'narmamaglev_v1', ...
+            'StopTime', num2str(currentCase.StopTime, 17), ...
+            'LoadExternalInput', 'on', ...
+            'ExternalInput', 'u', ...
+            'SaveTime', 'on', ...
+            'TimeSaveName', 'tout', ...
+            'SaveOutput', 'on', ...
+            'OutputSaveName', 'yout', ...
+            'SaveFormat', 'Array');
+
+        officialTime = simulationResult.tout;
+        officialOutput = simulationResult.yout;
+
     elseif currentCase.Model == "SC"
 
         % The official helper passes the symbolic string "T" as StopTime,
@@ -2242,8 +2289,9 @@ function [officialTime, ...
         warningState = warning;
         warningCleanup = onCleanup(@() warning(warningState)); %#ok<NASGU>
         warning('off', 'all');
-        [officialTime, officialOutput] = feval( ...
-            runFunction, ...
+        [officialTime, officialOutput] = ...
+            run_arch2025_f16_compat( ...
+            officialDirectory, ...
             4040, ...
             540, ...
             staticInitialConditions(1), ...
@@ -3802,6 +3850,85 @@ function text = passText_(value)
     else
         text = 'FAIL';
     end
+end
+
+
+function dataFile = locateArch2025AtData_()
+
+    dataFile = '';
+    fileName = 'sldemo_autotrans_data.mat';
+    explicitLocation = strtrim( ...
+        getenv('FALSIFY_ARCH2025_AT_DATA'));
+
+    if ~isempty(explicitLocation)
+        if isfolder(explicitLocation)
+            dataFile = fullfile(explicitLocation, fileName);
+        else
+            dataFile = explicitLocation;
+        end
+        return;
+    end
+
+    pathResult = which(fileName);
+    if ~isempty(pathResult)
+        dataFile = pathResult;
+        return;
+    end
+
+    userPathEntries = strsplit(userpath, pathsep);
+    releaseDirectoryName = ['R', version('-release')];
+
+    for entryIndex = 1:numel(userPathEntries)
+        currentRoot = strtrim(userPathEntries{entryIndex});
+        if isempty(currentRoot)
+            continue;
+        end
+
+        currentReleaseRoot = fullfile( ...
+            currentRoot, 'Examples', releaseDirectoryName);
+        matches = dir(fullfile( ...
+            currentReleaseRoot, '**', fileName));
+
+        if ~isempty(matches)
+            dataFile = fullfile(matches(1).folder, matches(1).name);
+            return;
+        end
+    end
+
+    legacyCandidates = {
+        fullfile(matlabroot, 'toolbox', 'simulink', ...
+            'simdemos', 'automotive', fileName)
+        fullfile(matlabroot, 'examples', 'simulink', ...
+            'data', fileName)
+    };
+
+    for candidateIndex = 1:numel(legacyCandidates)
+        if isfile(legacyCandidates{candidateIndex})
+            dataFile = legacyCandidates{candidateIndex};
+            return;
+        end
+    end
+end
+
+
+function prepareArch2025AtCase_(currentCase, settings)
+
+    if currentCase.Model ~= "AT"
+        return;
+    end
+
+    dataFile = char(settings.AtDataFile);
+    assert(isfile(dataFile), ...
+        [ ...
+            'AT requires the MathWorks support data file ' ...
+            'sldemo_autotrans_data.mat. Install the Simulink example ' ...
+            '"Modeling an Automatic Transmission Controller", or set ' ...
+            'FALSIFY_ARCH2025_AT_DATA to the absolute file or directory. ' ...
+            'The support data is not redistributed by this repository.' ...
+        ]);
+
+    addpath(fileparts(dataFile), '-begin');
+    rehash path;
 end
 
 

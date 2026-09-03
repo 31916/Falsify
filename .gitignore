@@ -24,6 +24,9 @@ results/arch2025/final/*
 !results/arch2025/final/arch2025_status.csv
 !results/arch2025/final/arch2025_official_violations.csv
 !results/arch2025/final/arch2025_final_report.txt
+!results/arch2025/compatibility/
+results/arch2025/compatibility/*
+!results/arch2025/compatibility/arch2025_clean_checkout_smoke.csv
 
 # Temporary / backup files
 *_backup.*

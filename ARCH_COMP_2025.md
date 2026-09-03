@@ -54,6 +54,7 @@ MATLAB/
 | `FALSIFY_ARCH2025_OFFICIAL_ROOT` | `ARCH-COMP-full/models/FALS` の絶対パス |
 | `FALSIFY_ARCH2025_FALBENCH_ROOT` | FalBenchGenルートの絶対パス |
 | `FALSIFY_ARCH2025_PYTHON` | ChainerRL環境のPython実行ファイル |
+| `FALSIFY_ARCH2025_AT_DATA` | `sldemo_autotrans_data.mat`、またはそれを含むディレクトリの絶対パス |
 | `FALSIFY_ARCH2025_OUTPUT_DIR` | 結果出力先（相対指定はリポジトリ基準） |
 | `FALSIFY_ARCH2025_CASE_FILTER` | CaseIDのワイルドカードフィルタ |
 | `FALSIFY_ARCH2025_RESUME_PASSED` | `0`で成功済みケースも再実行 |
@@ -63,6 +64,14 @@ MATLAB/
 | `FALSIFY_ARCH2025_FINAL_SOURCE` | 公開用最終表へ採用する完全summary CSV |
 
 Python依存は [requirements-falsify.txt](requirements-falsify.txt) に記載しています。ローカル検証環境は MATLAB R2026a、Python 3.9.6、NumPy 1.23.5、Chainer 7.8.1、ChainerRL 0.8.0、Gym 0.22.0 です。
+
+ATはMathWorksのSimulink例題「Modeling an Automatic Transmission Controller」に含まれる `sldemo_autotrans_data.mat` を必要とします。このファイルは本リポジトリでは再配布しません。MATLABパスまたは現在のreleaseのユーザーExamplesディレクトリから自動検出できない場合は、`FALSIFY_ARCH2025_AT_DATA` で場所を指定してください。
+
+公式ARCH-COMP checkoutは変更せずに使用します。NNの公式helperにある行・列方向の不整合とbase workspace初期化、F16同梱AeroBenchVVの設定フィールド名差、SC helperのR2026aにおけるStopTime指定は、Falsify側の公式再生adapterで吸収します。
+
+### 未修正の公式checkoutによる横断確認
+
+ARCH-COMP `5e8f72b8d5f30be002f40ae5df4a8e04d7f64e3c` の変更なしcheckoutを使い、7モデルから代表1ケースずつをRAND・1 episodeで再実行しました。全7件で入力検査、公式再生、成立／違反分類の一致が成功しています。コンパクトな結果は [arch2025_clean_checkout_smoke.csv](results/arch2025/compatibility/arch2025_clean_checkout_smoke.csv) に保存しています。この横断確認は接続互換性の検査であり、アルゴリズム性能評価には数えません。
 
 ## 実行
 
@@ -98,8 +107,8 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 
 - SB: FalBenchGenの `s1`、`s3`、`s5`、`cc3`、`cc5` を接続し、4個の制御点を各6秒保持します。選択ネットワークは各仕様の `a2_k1_1_4_9_10_0.01_LSTM/*a2_k1_1.mat` です。
 - SC: 公式 `steamcondense_RNN_22.slx` の物理サブシステムをラッパーへ直接使用します。Instance 2は35秒を20等分した区分一定入力です。
-- F16: 時変入力ではなくroll・pitch・yawの初期条件を探索し、公式AeroBenchVVの非線形ODEを実行します。checkoutに不足するControl System Toolbox非依存の線形化構造体と、使用モードのautopilot command関数は `arch2025_compat/f16` に限定して補っています。
-- AT / AFC / CC / NN: 公式物理モデルを使う既存ラッパーに、Instanceごとの入力parameterization、ログ、公式再生adapterを追加しています。AT/CCは生成時に公式solver設定をコピーします。NNの正規化状態は `[Ref-2, 0.4*Pos-1]` の順です。
+- F16: 時変入力ではなくroll・pitch・yawの初期条件を探索し、公式AeroBenchVVの非線形ODEを実行します。checkoutに不足するControl System Toolbox非依存の線形化構造体、使用モードのautopilot command関数、設定フィールド名の互換化は `arch2025_compat/f16` に限定して補っています。
+- AT / AFC / CC / NN: 公式物理モデルを使う既存ラッパーに、Instanceごとの入力parameterization、ログ、公式再生adapterを追加しています。AT/CCは生成時に公式solver設定をコピーします。NNの正規化状態は `[Ref-2, 0.4*Pos-1]` の順で、公式再生時の入力行列方向と `u_ts` はadapterで設定します。
 
 生成ラッパーのSimulinkバイナリはローカルパスを含み得るためGit管理せず、検証開始時に `arch2025_generated` へ構築します。
 
