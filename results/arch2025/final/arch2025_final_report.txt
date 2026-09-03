@@ -1,0 +1,21 @@
+ARCH-COMP 2025 Falsify final validation result
+===============================================
+
+Scope: SB, AT, AFC, CC, NN, F16, SC
+Algorithms: RAND, A3C, ACER, DDQN
+Budget: one Falsify episode per case
+PM: excluded because the official local model is unavailable
+
+Validated: 188 / 188
+Official replay: 188 / 188
+Classification agreement: 188 / 188
+Official violations found: 27
+Trajectory diagnostics within tolerance: 5 / 188
+
+SB: 20 / 20 validated
+AT: 80 / 80 validated
+AFC: 12 / 12 validated
+CC: 48 / 48 validated
+NN: 16 / 16 validated
+F16: 4 / 4 validated
+SC: 8 / 8 validated
