@@ -1,24 +1,35 @@
 clearvars;
 clc;
 
-% Assemble the successful focused ARCH-COMP 2025 runs without overwriting
-% the historical 117-case diagnostic table.  Later sources take priority
-% when a case was run more than once.
+% Publish a complete ARCH-COMP 2025 validation run, or assemble the older
+% focused runs when no explicit source is supplied. Later sources take
+% priority when a case was run more than once.
 
 repoDirectory = fileparts(mfilename('fullpath'));
 resultsRoot = fullfile(repoDirectory, 'results', 'arch2025');
 
-sourceFiles = string(fullfile(resultsRoot, {
-    'all/arch2025_all_summary.csv'
-    'selected/at__/arch2025_all_summary.csv'
-    'selected/afc__/arch2025_all_summary.csv'
-    'selected/cc___i2__/arch2025_all_summary.csv'
-    'selected/nn___i2__/arch2025_all_summary.csv'
-    'selected/__acer/arch2025_all_summary.csv'
-    'selected/sb__/arch2025_all_summary.csv'
-    'selected/sc__/arch2025_all_summary.csv'
-    'selected/f16__/arch2025_all_summary.csv'
-}));
+explicitSource = strtrim(string( ...
+    getenv('FALSIFY_ARCH2025_FINAL_SOURCE') ...
+));
+
+if strlength(explicitSource) > 0
+    if ~isfile(explicitSource)
+        explicitSource = fullfile(repoDirectory, explicitSource);
+    end
+    sourceFiles = explicitSource;
+else
+    sourceFiles = string(fullfile(resultsRoot, {
+        'all/arch2025_all_summary.csv'
+        'selected/at__/arch2025_all_summary.csv'
+        'selected/afc__/arch2025_all_summary.csv'
+        'selected/cc___i2__/arch2025_all_summary.csv'
+        'selected/nn___i2__/arch2025_all_summary.csv'
+        'selected/__acer/arch2025_all_summary.csv'
+        'selected/sb__/arch2025_all_summary.csv'
+        'selected/sc__/arch2025_all_summary.csv'
+        'selected/f16__/arch2025_all_summary.csv'
+    }));
+end
 
 for sourceIndex = 1:numel(sourceFiles)
     assert(isfile(sourceFiles(sourceIndex)), ...
@@ -135,6 +146,11 @@ fprintf(report, 'Scope: SB, AT, AFC, CC, NN, F16, SC\n');
 fprintf(report, 'Algorithms: RAND, A3C, ACER, DDQN\n');
 fprintf(report, 'Budget: one Falsify episode per case\n');
 fprintf(report, 'PM: excluded because the official local model is unavailable\n\n');
+fprintf(report, 'Source summary file(s):\n');
+for sourceIndex = 1:numel(sourceFiles)
+    fprintf(report, '  %s\n', sourceFiles(sourceIndex));
+end
+fprintf(report, '\n');
 fprintf(report, 'Validated: %d / %d\n', ...
     sum(summaryTable.OverallPass), height(summaryTable));
 fprintf(report, 'Official replay: %d / %d\n', ...
