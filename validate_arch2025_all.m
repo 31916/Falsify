@@ -9,19 +9,19 @@ clc;
 %   Models      : SB, AT, AFC, CC, NN, F16, SC
 %   Algorithms  : RAND, A3C, ACER, DDQN
 %   Requirements:
-%       SB  : S1, S3, S5, CC3, CC5
+%       SB  : SB1-SB5
 %       AT  : AT1, AT2, AT51-AT54, AT6a-AT6c, AT6abc
 %       AFC : AFC27, AFC29, AFC33
 %       CC  : CC1-CC5, CCx
-%       NN  : NN, NNx
+%       NN  : NN, NNb (beta = 0.04), NNx
 %       F16: F16a
 %       SC  : SCa
 %   Instances:
 %       AT, CC, NN : Instance 1 and Instance 2
-%       AFC        : Instance 2
+%       AFC, SB    : Instance 2
 %
 % Total:
-%   47 benchmark conditions x 4 algorithms = 188 cases
+%   49 benchmark conditions x 4 algorithms = 196 cases
 %
 % Every case:
 %   1. Runs Falsify.
@@ -237,7 +237,7 @@ wrapperCatalog = prepareAllWrappers_( ...
 );
 
 % =========================================================
-% Build the full 117-case catalog
+% Build the full 196-case catalog
 % =========================================================
 
 settings = struct();
@@ -263,8 +263,8 @@ settings.Wrappers = wrapperCatalog;
 
 allCases = buildAllCases_(algorithms, settings);
 
-assert(numel(allCases) == 188, ...
-    'The unified catalog must contain 188 cases. Actual: %d', ...
+assert(numel(allCases) == 196, ...
+    'The unified catalog must contain 196 cases. Actual: %d', ...
     numel(allCases));
 
 catalogCaseIds = vertcat(allCases.CaseID);
@@ -803,12 +803,12 @@ function cases = buildAllCases_(algorithms, settings)
 
     modelRequirements = {
         "SB",  [
-            "S1"
-            "S3"
-            "S5"
-            "CC3"
-            "CC5"
-        ], 1
+            "SB1"
+            "SB2"
+            "SB3"
+            "SB4"
+            "SB5"
+        ], 2
 
         "AT",  [
             "AT1"
@@ -840,6 +840,7 @@ function cases = buildAllCases_(algorithms, settings)
 
         "NN", [
             "NN"
+            "NNb"
             "NNx"
         ], [1 2]
 
@@ -976,10 +977,10 @@ function spec = makeInstanceSpec_( ...
             spec.InputRange = [0.0 1.0];
             spec.Outputs = 1;
 
-            if ismember(requirementName, ["CC3", "CC5"])
+            if ismember(requirementName, ["SB4", "SB5"])
                 spec.OutputRange = repmat([-100.0 100.0], 2, 1);
                 spec.Outputs = [1 2];
-            elseif requirementName == "S3"
+            elseif requirementName == "SB2"
                 spec.OutputRange = [0.0 100.0];
             else
                 spec.OutputRange = [-50.0 50.0];
@@ -990,23 +991,23 @@ function spec = makeInstanceSpec_( ...
             spec.OfficialRunFunction = "predict";
 
             networkRelativeFiles = struct( ...
-                'S1', fullfile( ...
+                'SB1', fullfile( ...
                     'Model', 'Model_matlab_delta=2', ...
                     's1a2_k1_1_4_9_10_0.01_LSTM', ...
                     's1a2_k1_1.mat'), ...
-                'S3', fullfile( ...
+                'SB2', fullfile( ...
                     'Model', 'Model_matlab_delta=2', ...
                     's3a2_k1_1_4_9_10_0.01_LSTM', ...
                     's3a2_k1_1.mat'), ...
-                'S5', fullfile( ...
+                'SB3', fullfile( ...
                     'Model', 'Model_matlab_delta=2', ...
                     's5a2_k1_1_4_9_10_0.01_LSTM', ...
                     's5a2_k1_1.mat'), ...
-                'CC3', fullfile( ...
+                'SB4', fullfile( ...
                     'Model', 'Model_matlab_cc35a', ...
                     'cc3a2_k1_1_4_9_10_0.01_LSTM', ...
                     'cc3a2_k1_1.mat'), ...
-                'CC5', fullfile( ...
+                'SB5', fullfile( ...
                     'Model', 'Model_matlab_cc35a', ...
                     'cc5a2_k1_1_4_9_10_0.01_LSTM', ...
                     'cc5a2_k1_1.mat') ...
@@ -1254,17 +1255,17 @@ function spec = makeRequirementSpec_(modelName, requirementName)
 
             switch requirementName
 
-                case "S1"
+                case "SB1"
                     spec.Formula = "[]_[0,24]bUpper20";
                     spec.Preds = makePred_("bUpper20", 1, 20);
 
-                case "S3"
+                case "SB2"
                     spec.Formula = ...
                         "[]_[0,18](bLower90 \/ <>_[0,6]bUpper50)";
                     spec.Preds(1) = makePred_("bLower90", -1, -90);
                     spec.Preds(2) = makePred_("bUpper50", 1, 50);
 
-                case "S5"
+                case "SB3"
                     spec.Formula = ...
                         "!(<>_[6,12]bLower10) \/ " + ...
                         "[]_[18,24]bLowerMinus10";
@@ -1272,18 +1273,18 @@ function spec = makeRequirementSpec_(modelName, requirementName)
                     spec.Preds(2) = makePred_( ...
                         "bLowerMinus10", -1, 10);
 
-                case "CC3"
+                case "SB4"
                     spec.Formula = ...
-                        "[]_[0,20](([]_[0,5]b1Upper20) \/ " + ...
+                        "[]_[0,19](([]_[0,5]b1Upper20) \/ " + ...
                         "(<>_[0,5]b2Lower40))";
                     spec.Preds(1) = makePred_( ...
                         "b1Upper20", [1 0], 20);
                     spec.Preds(2) = makePred_( ...
                         "b2Lower40", [0 -1], -40);
 
-                case "CC5"
+                case "SB5"
                     spec.Formula = ...
-                        "[]_[0,18]<>_[0,2]((![]_[0,1]b1Lower9) " + ...
+                        "[]_[0,17]<>_[0,2]((![]_[0,1]b1Lower9) " + ...
                         "\/ ([]_[1,5]b2Lower9))";
                     spec.Preds(1) = makePred_( ...
                         "b1Lower9", [-1 0], -9);
@@ -1614,10 +1615,14 @@ function spec = makeRequirementSpec_(modelName, requirementName)
 
             switch requirementName
 
-                case "NN"
+                case {"NN", "NNb"}
 
                     alpha = 0.005;
-                    beta = 0.03;
+                    if requirementName == "NNb"
+                        beta = 0.04;
+                    else
+                        beta = 0.03;
+                    end
 
                     % State is [Ref, Pos].
                     %

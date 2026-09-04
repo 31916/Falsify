@@ -6,16 +6,16 @@ ARCH-COMP 2025 の対象7モデルについて、Falsifyで候補入力を生成
 
 | Model | Requirements | Instances | Cases | Validated |
 |---|---:|---:|---:|---:|
-| SB | 5 | 1 | 20 | 20 |
+| SB | 5 | 2 | 20 | 20 |
 | AT | 10 | 1 / 2 | 80 | 80 |
 | AFC | 3 | 2 | 12 | 12 |
 | CC | 6 | 1 / 2 | 48 | 48 |
-| NN | 2 | 1 / 2 | 16 | 16 |
+| NN | 3 | 1 / 2 | 24 | 24 |
 | F16 | 1 | 区別なし | 4 | 4 |
 | SC | 1 | 1 / 2 | 8 | 8 |
-| **合計** | **47条件** |  | **188** | **188** |
+| **合計** | **49条件** |  | **196** | **196** |
 
-各条件で RAND、A3C、ACER、DDQN を1 episodeずつ実行しています。全188件で次を確認済みです。
+各条件で RAND、A3C、ACER、DDQN を1 episodeずつ実行しています。全196件で次を確認済みです。
 
 1. Falsifyシミュレーション完走
 2. 実際の入力の取得
@@ -69,9 +69,9 @@ ATはMathWorksのSimulink例題「Modeling an Automatic Transmission Controller�
 
 公式ARCH-COMP checkoutは変更せずに使用します。NNの公式helperにある行・列方向の不整合とbase workspace初期化、F16同梱AeroBenchVVの設定フィールド名差、SC helperのR2026aにおけるStopTime指定は、Falsify側の公式再生adapterで吸収します。
 
-### 未修正の公式checkoutによる横断確認
+### 未修正の公式checkoutによる全件確認
 
-ARCH-COMP `5e8f72b8d5f30be002f40ae5df4a8e04d7f64e3c` の変更なしcheckoutを使い、7モデルから代表1ケースずつをRAND・1 episodeで再実行しました。全7件で入力検査、公式再生、成立／違反分類の一致が成功しています。コンパクトな結果は [arch2025_clean_checkout_smoke.csv](results/arch2025/compatibility/arch2025_clean_checkout_smoke.csv) に保存しています。この横断確認は接続互換性の検査であり、アルゴリズム性能評価には数えません。
+ARCH-COMP `5e8f72b8d5f30be002f40ae5df4a8e04d7f64e3c` の変更なしcheckoutを使い、現行49条件を4手法・1 episodeで再実行しました。全196件で入力検査、公式再生、成立／違反分類の一致が成功しています。全件表は `results/arch2025/final`、7モデルからRANDの代表1ケースずつを抜き出したコンパクトな結果は [arch2025_clean_checkout_smoke.csv](results/arch2025/compatibility/arch2025_clean_checkout_smoke.csv) に保存しています。この実行は接続互換性の検査であり、アルゴリズム性能評価には数えません。
 
 ## 実行
 
@@ -100,15 +100,15 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 完全な一括runを公開用 `results/arch2025/final` へ反映する場合は、sourceを明示して集計します。
 
 ```sh
-/Applications/MATLAB_R2026a.app/bin/matlab -batch "setenv('FALSIFY_ARCH2025_FINAL_SOURCE','results/arch2025/corrected_full188_20260902/arch2025_all_summary.csv'); assemble_arch2025_final_results"
+/Applications/MATLAB_R2026a.app/bin/matlab -batch "setenv('FALSIFY_ARCH2025_FINAL_SOURCE','results/arch2025/all/arch2025_all_summary.csv'); assemble_arch2025_final_results"
 ```
 
 ## モデル固有の接続
 
-- SB: FalBenchGenの `s1`、`s3`、`s5`、`cc3`、`cc5` を接続し、4個の制御点を各6秒保持します。選択ネットワークは各仕様の `a2_k1_1_4_9_10_0.01_LSTM/*a2_k1_1.mat` です。
+- SB: 公式名SB1-SB5を、FalBenchGenの `s1`、`s3`、`s5`、`cc3`、`cc5` にそれぞれ対応付けます。ARCH-COMP 2025ではInstance 2のみを対象とし、4個の制御点を各6秒保持します。SB4とSB5の外側時間区間は公式表どおり `[0,19]` と `[0,17]` です。選択ネットワークは各仕様の `a2_k1_1_4_9_10_0.01_LSTM/*a2_k1_1.mat` です。
 - SC: 公式 `steamcondense_RNN_22.slx` の物理サブシステムをラッパーへ直接使用します。Instance 2は35秒を20等分した区分一定入力です。
 - F16: 時変入力ではなくroll・pitch・yawの初期条件を探索し、公式AeroBenchVVの非線形ODEを実行します。checkoutに不足するControl System Toolbox非依存の線形化構造体、使用モードのautopilot command関数、設定フィールド名の互換化は `arch2025_compat/f16` に限定して補っています。
-- AT / AFC / CC / NN: 公式物理モデルを使う既存ラッパーに、Instanceごとの入力parameterization、ログ、公式再生adapterを追加しています。AT/CCは生成時に公式solver設定をコピーします。NNの正規化状態は `[Ref-2, 0.4*Pos-1]` の順で、公式再生時の入力行列方向と `u_ts` はadapterで設定します。
+- AT / AFC / CC / NN: 公式物理モデルを使う既存ラッパーに、Instanceごとの入力parameterization、ログ、公式再生adapterを追加しています。AT/CCは生成時に公式solver設定をコピーします。NNの正規化状態は `[Ref-2, 0.4*Pos-1]` の順で、公式再生時の入力行列方向と `u_ts` はadapterで設定します。NNは通常のβ=0.03、β=0.04の派生条件 `NNb`、`NNx` を両Instanceで扱います。
 
 生成ラッパーのSimulinkバイナリはローカルパスを含み得るためGit管理せず、検証開始時に `arch2025_generated` へ構築します。
 
@@ -116,6 +116,6 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 
 最終判定は公式モデルを優先します。`OfficialRobustness < 0` を公式要求違反、`> 0` を要求成立として記録します。`FalsifyClassification` と `OfficialClassification` は `VIOLATED`、`SATISFIED`、`BOUNDARY` のいずれかです。
 
-`OverallPass` はFalsify完走、入力検査、公式再生、分類一致から決定します。数値軌道の一致は独立した診断列です。意味修正後の一括runで、`TrajectoryEquivalencePass` は6/188件です。残りには入力サンプリング、solver、logging、正規化等に由来する数値差があります。このため「公式判定一致」は確認済みですが、「全モデルで軌道が数値的に同一」とは主張しません。
+`OverallPass` はFalsify完走、入力検査、公式再生、分類一致から決定します。数値軌道の一致は独立した診断列です。正式カタログ修正後の一括runで、`TrajectoryEquivalencePass` は6/196件です。残りには入力サンプリング、solver、logging、正規化等に由来する数値差があります。このため「公式判定一致」は確認済みですが、「全モデルで軌道が数値的に同一」とは主張しません。
 
 PMはローカルcheckoutに公式pacemakerモデルがないため第一段階から除外しています。FIM、複数seed性能比較、他ツール比較にはまだ着手していません。

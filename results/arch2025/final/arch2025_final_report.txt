@@ -7,18 +7,18 @@ Budget: one Falsify episode per case
 PM: excluded because the official local model is unavailable
 
 Source summary file(s):
-  results/arch2025/corrected_full188_20260902/arch2025_all_summary.csv
+  results/arch2025/clean_full196_20260904/arch2025_all_summary.csv
 
-Validated: 188 / 188
-Official replay: 188 / 188
-Classification agreement: 188 / 188
+Validated: 196 / 196
+Official replay: 196 / 196
+Classification agreement: 196 / 196
 Official violations found: 15
-Trajectory diagnostics within tolerance: 6 / 188
+Trajectory diagnostics within tolerance: 6 / 196
 
 SB: 20 / 20 validated
 AT: 80 / 80 validated
 AFC: 12 / 12 validated
 CC: 48 / 48 validated
-NN: 16 / 16 validated
+NN: 24 / 24 validated
 F16: 4 / 4 validated
 SC: 8 / 8 validated

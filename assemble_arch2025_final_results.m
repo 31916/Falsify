@@ -76,8 +76,8 @@ for sourceIndex = 1:numel(sourceFiles)
     end
 end
 
-assert(caseResults.Count == 188, ...
-    'Expected 188 unique validated cases, but assembled %d.', ...
+assert(caseResults.Count == 196, ...
+    'Expected 196 unique validated cases, but assembled %d.', ...
     caseResults.Count);
 
 resultCells = values(caseResults);
@@ -96,7 +96,7 @@ summaryTable = sortrows(summaryTable, ...
 summaryTable.ModelOrder = [];
 summaryTable.AlgorithmOrder = [];
 
-expectedModelCounts = [20, 80, 12, 48, 16, 4, 8];
+expectedModelCounts = [20, 80, 12, 48, 24, 4, 8];
 modelNames = ["SB", "AT", "AFC", "CC", "NN", "F16", "SC"];
 for modelIndex = 1:numel(modelNames)
     actualCount = sum(summaryTable.Model == modelNames(modelIndex));
@@ -104,7 +104,7 @@ for modelIndex = 1:numel(modelNames)
         'Unexpected %s case count: %d.', modelNames(modelIndex), actualCount);
 end
 for algorithm = ["RAND", "A3C", "ACER", "DDQN"]
-    assert(sum(summaryTable.Algorithm == algorithm) == 47, ...
+    assert(sum(summaryTable.Algorithm == algorithm) == 49, ...
         'Unexpected %s case count.', algorithm);
 end
 
