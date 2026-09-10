@@ -1,4 +1,5 @@
-function [numEpisode, elapsedTime, bestRob, bestXout, bestYout] = falsify(config)
+function [numEpisode, elapsedTime, bestRob, bestXout, bestYout, ...
+        bestEvaluation] = falsify(config)
 
     function [Y, T, R] = yout2TY(yout)
             Y = double(squeeze(yout.getElement(2).Values.Data));
@@ -151,7 +152,20 @@ function [numEpisode, elapsedTime, bestRob, bestXout, bestYout] = falsify(config
     % Load the model on the worker
     load_system(config.mdl);
     bestRob = inf;
+    bestEvaluation = struct();
     normal_preds = normalize_pred(config.preds, config.output_range);
+    useEpisodeEvaluator = ...
+        isfield(config, 'episodeEvaluator') && ...
+        isa(config.episodeEvaluator, 'function_handle');
+
+    if useEpisodeEvaluator
+        objectiveSource = "external episode evaluator";
+        if isfield(config, 'objectiveSource')
+            objectiveSource = string(config.objectiveSource);
+        end
+    else
+        objectiveSource = "Falsify wrapper";
+    end
     if isfield(config, 'alpha')
         py.driver.start_learning(config.option,...
             size(config.output_range, 1), size(config.input_range, 1),...
@@ -166,13 +180,42 @@ function [numEpisode, elapsedTime, bestRob, bestXout, bestYout] = falsify(config
     for numEpisode=1:config.maxEpisodes
         [~, xout, yout] = runsim(config, normal_preds);
         [Y, T, R] = yout2TY(yout);
-        rob = dp_taliro(config.targetFormula, normal_preds, Y, T, [], [], []);
-        py.driver.stop_episode_and_train(Y(end, :), exp(- R) - 1);
-        disp(['Current iteration: ', num2str(numEpisode), ', rob = ', num2str(rob)])
+        wrapperRob = dp_taliro( ...
+            config.targetFormula, normal_preds, Y, T, [], [], []);
+
+        if useEpisodeEvaluator
+            [rob, evaluation] = config.episodeEvaluator(yout);
+            validateattributes(rob, {'numeric'}, ...
+                {'real', 'scalar', 'nonnan'}, ...
+                mfilename, 'episodeEvaluator robustness');
+            assert(isstruct(evaluation), ...
+                'Falsify:InvalidEpisodeEvaluation', ...
+                'episodeEvaluator must return a metadata struct.');
+        else
+            rob = wrapperRob;
+            evaluation = struct();
+        end
+
+        evaluation.ObjectiveSource = objectiveSource;
+        evaluation.WrapperRobustness = wrapperRob;
+        evaluation.WrapperTerminalMonitorValue = R;
+
+        % The externally evaluated robustness is authoritative for the
+        % terminal RL reward, best-candidate selection, and early stopping.
+        % ARCH-COMP integrations use this hook to evaluate every generated
+        % candidate on the official model rather than on the RL wrapper.
+        py.driver.stop_episode_and_train(Y(end, :), exp(-rob) - 1);
+        disp([ ...
+            'Current iteration: ', num2str(numEpisode), ...
+            ', rob = ', num2str(rob), ...
+            ', wrapper rob = ', num2str(wrapperRob), ...
+            ', objective = ', char(objectiveSource) ...
+        ])
         if rob <= bestRob
             bestRob = rob;
             bestYout = yout;
             bestXout = xout;
+            bestEvaluation = evaluation;
             if rob < 0
                 break;
             end
