@@ -58,6 +58,8 @@ MATLAB/
 | `FALSIFY_ARCH2025_FALBENCH_ROOT` | FalBenchGenルートの絶対パス |
 | `FALSIFY_ARCH2025_PYTHON` | ChainerRL環境のPython実行ファイル |
 | `FALSIFY_ARCH2025_AT_DATA` | `sldemo_autotrans_data.mat`、またはそれを含むディレクトリの絶対パス |
+| `FALSIFY_ARCH2025_GENERATED_DIR` | 生成ラッパーの出力先（並列実行ではワーカーごとに分離） |
+| `FALSIFY_ARCH2025_THREADS_PER_WORKER` | 1ワーカー内の数値計算ライブラリの最大スレッド数 |
 | `FALSIFY_ARCH2025_OUTPUT_DIR` | 結果出力先（相対指定はリポジトリ基準） |
 | `FALSIFY_ARCH2025_CASE_FILTER` | CaseIDのワイルドカードフィルタ |
 | `FALSIFY_ARCH2025_RESUME_PASSED` | `0`で成功済みケースも再実行 |
@@ -105,6 +107,22 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 ```sh
 /Applications/MATLAB_R2026a.app/bin/matlab -batch "setenv('FALSIFY_ARCH2025_FINAL_SOURCE','results/arch2025/all/arch2025_all_summary.csv'); assemble_arch2025_final_results"
 ```
+
+### 独立MATLABプロセスによる並列実行
+
+`start_parallel_formal_experiment.sh` は、manifestのバッチを複数ワーカーへ排他的に割り当てます。ワーカーごとに生成ラッパー、MATLAB設定、Simulinkキャッシュ、コード生成先、Pythonキャッシュを分離します。試行結果と完了マーカーはTrialIDごとのディレクトリへ保存され、完了済み試行は再開時にスキップされます。集計は全ワーカー終了後に1プロセスで行います。
+
+32論理CPUを4 CPUずつ8ワーカーへ割り当てる例です。
+
+```sh
+export FALSIFY_ARCH2025_EXPERIMENT_ROOT=/path/to/experiment
+export FALSIFY_ARCH2025_EXPECTED_SHA=the_exact_falsify_commit
+export FALSIFY_ARCH2025_WORKER_COUNT=8
+export FALSIFY_ARCH2025_CPUS_PER_WORKER=4
+bash arch2025_experiment/start_parallel_formal_experiment.sh
+```
+
+同時MATLABプロセス数はライセンスと共有サーバの規則に従ってください。ワーカー数とCPU数の積が利用可能CPU数を超える構成、必要メモリを確保できない構成、100 GiB未満の空き容量では起動しません。
 
 ## モデル固有の接続
 

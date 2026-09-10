@@ -19,19 +19,43 @@ PYTHON="$ROOT/env/falsify-py39/bin/python"
 MATLAB=${FALSIFY_ARCH2025_MATLAB_BIN:-/usr/local/MATLAB/R2026a/bin/matlab}
 TASKSET=${FALSIFY_ARCH2025_TASKSET_BIN:-/usr/bin/taskset}
 CPU_LIST=${FALSIFY_ARCH2025_CPU_LIST:-0-3}
+THREADS_PER_WORKER=${FALSIFY_ARCH2025_THREADS_PER_WORKER:-4}
+RUN_NAMESPACE=${FALSIFY_ARCH2025_RUN_NAMESPACE:-formal}
+WORKER_ID=${FALSIFY_ARCH2025_WORKER_ID:-single}
+
+if [[ ! "$RUN_NAMESPACE" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+  printf 'invalid FALSIFY_ARCH2025_RUN_NAMESPACE: %s\n' "$RUN_NAMESPACE" >&2
+  exit 3
+fi
+if [[ ! "$WORKER_ID" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+  printf 'invalid FALSIFY_ARCH2025_WORKER_ID: %s\n' "$WORKER_ID" >&2
+  exit 4
+fi
+if [[ ! "$THREADS_PER_WORKER" =~ ^[1-9][0-9]*$ ]]; then
+  printf 'invalid FALSIFY_ARCH2025_THREADS_PER_WORKER: %s\n' \
+    "$THREADS_PER_WORKER" >&2
+  exit 5
+fi
+
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 TOOLS="$SCRIPT_DIR/formal_tools.py"
 MEX_DIR="$ROOT/build/mex"
-CACHE_DIR="$ROOT/build/simulink-cache"
-CODEGEN_DIR="$ROOT/build/simulink-codegen"
-FORMAL_MANIFEST="$ROOT/manifests/formal/trials.csv"
-RUN_ROOT="$ROOT/runs/formal"
-LOG_ROOT="$ROOT/logs/formal"
-TRIAL_MANIFEST_ROOT="$ROOT/manifests/formal/trials"
-SUMMARY_ROOT="$ROOT/summaries/formal"
-BATCH_MANIFEST_ROOT="$ROOT/manifests/formal/batches/$BATCH_ID"
+WORKER_BUILD_ROOT="$ROOT/build/workers/$RUN_NAMESPACE/$WORKER_ID"
+GENERATED_DIR="$WORKER_BUILD_ROOT/generated"
+CACHE_DIR="$WORKER_BUILD_ROOT/simulink-cache"
+CODEGEN_DIR="$WORKER_BUILD_ROOT/simulink-codegen"
+PREF_DIR="$WORKER_BUILD_ROOT/matlab-prefs"
+PYTHON_CACHE_DIR="$WORKER_BUILD_ROOT/python-cache"
+FORMAL_MANIFEST=${FALSIFY_ARCH2025_MANIFEST:-$ROOT/manifests/formal/trials.csv}
+RUN_ROOT="$ROOT/runs/$RUN_NAMESPACE"
+LOG_ROOT="$ROOT/logs/$RUN_NAMESPACE"
+TRIAL_MANIFEST_ROOT="$ROOT/manifests/$RUN_NAMESPACE/trials"
+SUMMARY_ROOT="$ROOT/summaries/$RUN_NAMESPACE"
+BATCH_MANIFEST_ROOT="$ROOT/manifests/$RUN_NAMESPACE/batches/$BATCH_ID"
 
-mkdir -p "$RUN_ROOT" "$LOG_ROOT" "$TRIAL_MANIFEST_ROOT" "$SUMMARY_ROOT" "$BATCH_MANIFEST_ROOT" "$CACHE_DIR" "$CODEGEN_DIR"
+mkdir -p "$RUN_ROOT" "$LOG_ROOT" "$TRIAL_MANIFEST_ROOT" "$SUMMARY_ROOT" "$BATCH_MANIFEST_ROOT" "$GENERATED_DIR" "$CACHE_DIR" "$CODEGEN_DIR" "$PREF_DIR" "$PYTHON_CACHE_DIR"
+
+export PYTHONPYCACHEPREFIX="$PYTHON_CACHE_DIR"
 
 invocation=$(date -u +%Y%m%dT%H%M%SZ)
 invocation_root="$BATCH_MANIFEST_ROOT/$invocation"
@@ -84,6 +108,7 @@ while IFS=$'\t' read -r sequence batch_id seed_index seed trial_id case_id model
   export FALSIFY_ARCH2025_FALBENCH_ROOT="$FALBENCH_ROOT"
   export FALSIFY_ARCH2025_PYTHON="$PYTHON"
   export FALSIFY_ARCH2025_AT_DATA="$ROOT/assets/mathworks/sldemo_autotrans_data.mat"
+  export FALSIFY_ARCH2025_GENERATED_DIR="$GENERATED_DIR"
   export FALSIFY_ARCH2025_MAX_EPISODES="$max_evaluations"
   export FALSIFY_ARCH2025_SEED_OVERRIDE="$seed"
   export FALSIFY_ARCH2025_RESUME_COMPLETED=0
@@ -91,12 +116,12 @@ while IFS=$'\t' read -r sequence batch_id seed_index seed trial_id case_id model
   export FALSIFY_ARCH2025_CASE_FILTER="$case_id"
   export FALSIFY_ARCH2025_OUTPUT_DIR="$attempt_run/results"
   export FALSIFY_FORMAL_CPU_LIST="$CPU_LIST"
-  export MATLAB_PREFDIR="$ROOT/build/matlab-prefs"
-  export OMP_NUM_THREADS=4
-  export OMP_THREAD_LIMIT=4
-  export OPENBLAS_NUM_THREADS=4
-  export MKL_NUM_THREADS=4
-  export NUMEXPR_NUM_THREADS=4
+  export MATLAB_PREFDIR="$PREF_DIR"
+  export OMP_NUM_THREADS="$THREADS_PER_WORKER"
+  export OMP_THREAD_LIMIT="$THREADS_PER_WORKER"
+  export OPENBLAS_NUM_THREADS="$THREADS_PER_WORKER"
+  export MKL_NUM_THREADS="$THREADS_PER_WORKER"
+  export NUMEXPR_NUM_THREADS="$THREADS_PER_WORKER"
 
   printf '%s\n' "$(date --iso-8601=seconds)" > "$attempt_manifest/started_at.txt"
   env | LC_ALL=C sort | grep -E '^(FALSIFY_ARCH2025_|FALSIFY_FORMAL_|MATLAB_PREFDIR|OMP_|OPENBLAS_|MKL_|NUMEXPR_)' > "$attempt_manifest/environment.txt"
@@ -143,11 +168,13 @@ while IFS=$'\t' read -r sequence batch_id seed_index seed trial_id case_id model
     failure_count=$((failure_count + 1))
   fi
 
-  "$PYTHON" "$TOOLS" aggregate \
-    --manifest "$FORMAL_MANIFEST" \
-    --run-root "$RUN_ROOT" \
-    --manifest-root "$TRIAL_MANIFEST_ROOT" \
-    --output "$SUMMARY_ROOT"
+  if [[ ${FALSIFY_ARCH2025_DEFER_AGGREGATE:-0} != 1 ]]; then
+    "$PYTHON" "$TOOLS" aggregate \
+      --manifest "$FORMAL_MANIFEST" \
+      --run-root "$RUN_ROOT" \
+      --manifest-root "$TRIAL_MANIFEST_ROOT" \
+      --output "$SUMMARY_ROOT"
+  fi
 done < "$pending_file"
 
 printf '%s\n' "$(date --iso-8601=seconds)" > "$invocation_root/ended_at.txt"
@@ -155,11 +182,13 @@ printf '%d\n' "$executed_count" > "$invocation_root/executed-count.txt"
 printf '%d\n' "$skipped_count" > "$invocation_root/skipped-count.txt"
 printf '%d\n' "$failure_count" > "$invocation_root/failure-count.txt"
 
-"$PYTHON" "$TOOLS" aggregate \
-  --manifest "$FORMAL_MANIFEST" \
-  --run-root "$RUN_ROOT" \
-  --manifest-root "$TRIAL_MANIFEST_ROOT" \
-  --output "$SUMMARY_ROOT"
+if [[ ${FALSIFY_ARCH2025_DEFER_AGGREGATE:-0} != 1 ]]; then
+  "$PYTHON" "$TOOLS" aggregate \
+    --manifest "$FORMAL_MANIFEST" \
+    --run-root "$RUN_ROOT" \
+    --manifest-root "$TRIAL_MANIFEST_ROOT" \
+    --output "$SUMMARY_ROOT"
+fi
 
 if [[ $failure_count -ne 0 ]]; then
   exit 1

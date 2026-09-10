@@ -126,11 +126,18 @@ caseTraceDirectory = ...
         'traces' ...
     );
 
-generatedDirectory = ...
-    fullfile( ...
-        repoDirectory, ...
-        'arch2025_generated' ...
-    );
+generatedDirectorySetting = strtrim(string( ...
+    getenv('FALSIFY_ARCH2025_GENERATED_DIR')));
+
+if strlength(generatedDirectorySetting) > 0
+    generatedDirectory = char(generatedDirectorySetting);
+else
+    generatedDirectory = ...
+        fullfile( ...
+            repoDirectory, ...
+            'arch2025_generated' ...
+        );
+end
 
 % ---------------------------------------------------------
 % Batch options
@@ -3790,7 +3797,15 @@ function restorePaths_(repoDirectory, generatedDirectory)
 
     cd(repoDirectory);
 
+    staticSupportDirectory = ...
+        fullfile(repoDirectory, 'arch2025_generated');
+
+    assert(isfolder(staticSupportDirectory), ...
+        'ARCH-COMP support directory was not found: %s', ...
+        staticSupportDirectory);
+
     addpath(repoDirectory, '-begin');
+    addpath(staticSupportDirectory, '-begin');
     addpath(generatedDirectory, '-begin');
 
     addpath(fullfile(repoDirectory, 'autotrans'), '-begin');
@@ -3803,7 +3818,8 @@ function restorePaths_(repoDirectory, generatedDirectory)
         '-begin' ...
     );
 
-    % Generated classes and wrappers must win name resolution.
+    % Worker-local generated classes and wrappers must win name resolution;
+    % tracked support classes remain available from staticSupportDirectory.
     addpath(generatedDirectory, '-begin');
 
     rehash path;
