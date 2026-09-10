@@ -17,6 +17,8 @@ ALGORITHMS = ["RAND", "A3C", "ACER", "DDQN"]
 MODELS = ["SB", "AT", "AFC", "CC", "NN", "F16", "SC"]
 SEEDS = list(range(20250001, 20250011))
 MAX_EVALUATIONS = 1500
+EVALUATION_PROTOCOL = "arch-comp-2025-official-per-episode-v1"
+OBJECTIVE_SOURCE = "ARCH-COMP 2025 official model"
 
 
 def atomic_text(path, text):
@@ -134,6 +136,7 @@ def build_manifest(args):
         "Seeds": SEEDS,
         "Trials": len(rows),
         "MaxEvaluationsPerTrial": MAX_EVALUATIONS,
+        "EvaluationProtocol": EVALUATION_PROTOCOL,
         "MaximumSearchSimulations": len(rows) * MAX_EVALUATIONS,
         "BatchCount": len(set(row["BatchID"] for row in rows)),
         "Ordering": "Seed-specific cyclic rotation of model, condition, and algorithm order.",
@@ -153,7 +156,16 @@ def list_pending(args):
     writer = csv.writer(sys.stdout, delimiter="\t", lineterminator="\n")
     for row in selected:
         complete = Path(args.run_root) / row["TrialID"] / "complete.json"
-        if not complete.is_file():
+        protocol_complete = False
+        if complete.is_file():
+            try:
+                saved = json.loads(complete.read_text(encoding="utf-8"))
+                protocol_complete = (
+                    saved.get("EvaluationProtocol") == EVALUATION_PROTOCOL
+                )
+            except (OSError, ValueError):
+                protocol_complete = False
+        if not protocol_complete:
             writer.writerow([row[field] for field in fields])
 
 
@@ -214,6 +226,17 @@ def validate_attempt(args):
             errors.append("FalsifyRunPass was false")
         if not truthy(row.get("OfficialReplayPass")):
             errors.append("OfficialReplayPass was false")
+        if not truthy(row.get("ClassificationAgreementPass")):
+            errors.append("ClassificationAgreementPass was false")
+        if not truthy(row.get("OverallPass")):
+            errors.append("OverallPass was false")
+
+        if row.get("EvaluationProtocol") != EVALUATION_PROTOCOL:
+            errors.append(
+                f"EvaluationProtocol was {row.get('EvaluationProtocol')!r}"
+            )
+        if row.get("ObjectiveSource") != OBJECTIVE_SOURCE:
+            errors.append(f"ObjectiveSource was {row.get('ObjectiveSource')!r}")
 
         try:
             episodes = int(float(row.get("Episodes", "nan")))
@@ -221,9 +244,43 @@ def validate_attempt(args):
             episodes = -1
         if not 1 <= episodes <= int(args.max_evaluations):
             errors.append(f"Episodes was {episodes}")
+        try:
+            official_evaluations = int(float(
+                row.get("OfficialEvaluationCount", "nan")
+            ))
+        except ValueError:
+            official_evaluations = -1
+        if official_evaluations != episodes:
+            errors.append(
+                "OfficialEvaluationCount did not equal Episodes "
+                f"({official_evaluations} != {episodes})"
+            )
+
         falsify_robustness = number(row.get("FalsifyRobustness"))
-        if episodes < int(args.max_evaluations) and not falsify_robustness < 0:
-            errors.append("early termination occurred without negative FalsifyRobustness")
+        official_robustness = number(row.get("OfficialRobustness"))
+        if not math.isfinite(falsify_robustness):
+            errors.append("FalsifyRobustness was not finite")
+        if not math.isfinite(official_robustness):
+            errors.append("OfficialRobustness was not finite")
+        if (
+            math.isfinite(falsify_robustness)
+            and math.isfinite(official_robustness)
+            and not math.isclose(
+                falsify_robustness,
+                official_robustness,
+                rel_tol=0.0,
+                abs_tol=1.0e-12,
+            )
+        ):
+            errors.append(
+                "Falsify objective robustness did not equal the official "
+                "per-episode robustness"
+            )
+        if episodes < int(args.max_evaluations) and not official_robustness < 0:
+            errors.append(
+                "early termination occurred without negative "
+                "OfficialRobustness"
+            )
 
     timing = parse_time_file(args.time_file)
     status = {
@@ -236,6 +293,8 @@ def validate_attempt(args):
         "CaseID": args.case_id,
         "Seed": int(args.seed),
         "MaxEvaluations": int(args.max_evaluations),
+        "EvaluationProtocol": row.get("EvaluationProtocol", ""),
+        "ObjectiveSource": row.get("ObjectiveSource", ""),
         "MatlabExitCode": int(args.matlab_exit),
         "SummaryFile": str(Path(args.summary).resolve()),
         "MatlabLog": str(Path(args.matlab_log).resolve()),
@@ -249,6 +308,7 @@ def validate_attempt(args):
         official_counterexample = official_robustness < 0
         status.update({
             "Episodes": episodes,
+            "OfficialEvaluationCount": official_evaluations,
             "EarlyStopped": episodes < int(args.max_evaluations),
             "FalsifyRobustness": number(row.get("FalsifyRobustness")),
             "FalsifyReportedCounterexample": reported_counterexample,
@@ -288,8 +348,11 @@ def aggregate(args):
     reported_counterexamples = []
     official_counterexamples = []
     validated_counterexamples = []
+    wrapper_mismatches = []
     for complete_path in sorted(run_root.glob("*/complete.json")):
         complete = json.loads(complete_path.read_text(encoding="utf-8"))
+        if complete.get("EvaluationProtocol") != EVALUATION_PROTOCOL:
+            continue
         trial_id = complete["TrialID"]
         trial = manifest_by_id[trial_id]
         summary_rows = read_csv(complete["SummaryFile"])
@@ -316,6 +379,8 @@ def aggregate(args):
         completed.append(merged)
         if not truthy(source.get("ClassificationAgreementPass")):
             mismatches.append(merged)
+        if not truthy(source.get("WrapperClassificationAgreementPass")):
+            wrapper_mismatches.append(merged)
         if complete.get("FalsifyReportedCounterexample", False):
             reported_counterexamples.append(merged)
         if complete.get("OfficialCounterexample", False):
@@ -329,16 +394,26 @@ def aggregate(args):
         "Requirement", "Instance", "Algorithm", "Seed", "MaxEvaluations",
         "ActualEvaluations", "EarlyStopped", "Status", "FalsifyRobustness",
         "FalsifyClassification", "FalsifyReportedCounterexample",
+        "EvaluationProtocol", "ObjectiveSource", "OfficialEvaluationCount",
+        "WrapperRobustness", "WrapperClassification",
         "OfficialRobustness", "OfficialClassification",
         "OfficialCounterexample", "OfficialValidatedCounterexample",
         "InputRangePass", "InputStructurePass", "InputPass",
         "FalsifyRunPass", "OfficialReplayPass", "ClassificationAgreementPass",
+        "WrapperClassificationAgreementPass",
         "TrajectoryEquivalencePass", "OverallPass", "ElapsedSeconds",
-        "TotalWallSeconds", "MaximumRSSKiB", "InputTraceFile", "StateTraceFile",
+        "TotalWallSeconds", "MaximumRSSKiB", "EvaluationTraceFile",
+        "InputTraceFile", "StateTraceFile",
+        "WrapperStateTraceFile",
         "ErrorIdentifier", "ErrorMessage", "SummaryFile", "MatlabLog", "TimeFile",
     ]
     write_csv(output / "all_trials.csv", completed, all_fields)
     write_csv(output / "classification_mismatches.csv", mismatches, all_fields)
+    write_csv(
+        output / "wrapper_classification_mismatches.csv",
+        wrapper_mismatches,
+        all_fields,
+    )
     write_csv(output / "official_counterexamples.csv", official_counterexamples, all_fields)
     write_csv(
         output / "official_validated_counterexamples.csv",
@@ -406,6 +481,10 @@ def aggregate(args):
             "MeanOfficialRobustness": safe_stat(robustness, statistics.mean),
             "MaxOfficialRobustness": safe_stat(robustness, max),
             "ClassificationMismatches": sum(not truthy(row.get("ClassificationAgreementPass")) for row in rows),
+            "WrapperClassificationMismatches": sum(
+                not truthy(row.get("WrapperClassificationAgreementPass"))
+                for row in rows
+            ),
         })
     summary_fields = list(summary_rows[0]) if summary_rows else [
         "Model", "Requirement", "Instance", "Algorithm", "PlannedTrials", "CompletedTrials"
@@ -424,7 +503,8 @@ def aggregate(args):
         f"Falsify-reported counterexamples: {len(reported_counterexamples)}",
         f"Official counterexamples: {len(official_counterexamples)}",
         f"Official-validated reported counterexamples: {len(validated_counterexamples)}",
-        f"Classification mismatches among completed trials: {len(mismatches)}",
+        f"Authoritative classification mismatches: {len(mismatches)}",
+        f"Wrapper diagnostic classification mismatches: {len(wrapper_mismatches)}",
         "",
         "## Completed by model",
         "",
@@ -434,7 +514,12 @@ def aggregate(args):
         report.append(f"- {model}: {model_completed[model]} / {planned_by_model[model]}")
     report.extend([
         "",
-        "Final counterexample decisions use OfficialRobustness. Evaluation means and medians use successful official-counterexample trials only.",
+        (
+            "Every Falsify episode uses OfficialRobustness as its learning "
+            "objective, best-candidate score, and early-stop decision. "
+            "Evaluation means and medians use successful official-"
+            "counterexample trials only."
+        ),
     ])
     atomic_text(output / "progress_report.md", "\n".join(report) + "\n")
 

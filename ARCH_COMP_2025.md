@@ -1,39 +1,42 @@
 # Falsify × ARCH-COMP 2025 統合検証
 
-## 現在の成果
+## 現在の実装
 
-ARCH-COMP 2025 の対象7モデルについて、Falsifyで候補入力を生成し、入力条件の検査後に同一入力を公式モデルへ再投入して公式STL robustnessを計算する経路を実装しました。
+ARCH-COMP 2025 の対象7モデルについて、Falsifyが生成した**すべての候補入力**を公式モデルで評価します。各episodeでは、入力条件の検査、公式モデルの実行、公式軌跡に対するSTL robustness計算を行います。その公式robustnessをFalsifyの終端報酬、最良候補選択、反例発見による早期終了に使用します。
 
-| Model | Requirements | Instances | Cases | Validated |
-|---|---:|---:|---:|---:|
-| SB | 5 | 2 | 20 | 20 |
-| AT | 10 | 1 / 2 | 80 | 80 |
-| AFC | 3 | 2 | 12 | 12 |
-| CC | 6 | 1 / 2 | 48 | 48 |
-| NN | 3 | 1 / 2 | 24 | 24 |
-| F16 | 1 | 区別なし | 4 | 4 |
-| SC | 1 | 1 / 2 | 8 | 8 |
-| **合計** | **49条件** |  | **196** | **196** |
+評価方式は結果CSVの `EvaluationProtocol` に次の固定値で記録します。
 
-各条件で RAND、A3C、ACER、DDQN を1 episodeずつ実行しています。全196件で次を確認済みです。
+```text
+arch-comp-2025-official-per-episode-v1
+```
 
-1. Falsifyシミュレーション完走
-2. 実際の入力の取得
-3. 公式入力範囲とInstance構造への適合
-4. 同一入力による公式モデル再生
-5. 公式STL robustnessの計算
-6. Falsify側と公式側の成立／違反判定の一致
+`OfficialEvaluationCount` は各試行の `Episodes` と同じでなければなりません。Falsify用RL wrapperは候補入力を生成するために残しますが、wrapperのrobustnessと軌跡は診断専用であり、反例判定には使用しません。
 
-最終成果物は次の4ファイルです。
+| Model | Requirements | Instances | Cases |
+|---|---:|---:|---:|
+| SB | 5 | 2 | 20 |
+| AT | 10 | 1 / 2 | 80 |
+| AFC | 3 | 2 | 12 |
+| CC | 6 | 1 / 2 | 48 |
+| NN | 3 | 1 / 2 | 24 |
+| F16 | 1 | 区別なし | 4 |
+| SC | 1 | 1 / 2 | 8 |
+| **合計** | **49条件** |  | **196** |
+
+各条件で RAND、A3C、ACER、DDQN を扱います。変更後のコードは、まず49条件×4手法×1 episodeの196ケース横断試験で確認してから本実験へ使用します。
+
+### 既存結果の扱い
+
+次の既存ファイルは、変更前の「wrapperで探索し、選択候補だけを公式モデルで事後再生する」方式で作成された履歴です。
 
 - [全ケース結果](results/arch2025/final/arch2025_all_summary.csv)
 - [工程別ステータス](results/arch2025/final/arch2025_status.csv)
 - [公式モデルで確認した要求違反候補](results/arch2025/final/arch2025_official_violations.csv)
 - [集計レポート](results/arch2025/final/arch2025_final_report.txt)
 
-全ケース結果内の `InputTraceFile` / `StateTraceFile` は、実行時に生成されたローカル証跡へのリポジトリ相対パスです。容量の大きい生トレースはGit管理せず、再実行時に再生成します。
+全ケース結果内の `EvaluationTraceFile` / `InputTraceFile` / `StateTraceFile` は、実行時に生成されたローカル証跡へのリポジトリ相対パスです。`EvaluationTraceFile` には全episodeの公式目的robustnessとwrapper診断robustnessを保存します。容量の大きい生トレースはGit管理せず、再実行時に再生成します。
 
-意味修正後の一括runで、公式側のrobustnessが負となった要求違反候補は15件です。ただし、この結果は接続検証用の1 episode実行であり、発見率や速度などのアルゴリズム性能を示すものではありません。
+既存の196ケースでは符号判定は196/196件で一致しましたが、軌跡一致は6/196件でした。旧 `OverallPass` は軌跡一致を要求していなかったため、この結果を新しい公式episode評価方式の成功証拠として使用してはいけません。新しい集計・再開処理は、旧方式のCSVや完了マーカーを完了済みとして受理しません。
 
 ## ディレクトリ配置
 
@@ -69,9 +72,9 @@ ATはMathWorksのSimulink例題「Modeling an Automatic Transmission Controller�
 
 公式ARCH-COMP checkoutは変更せずに使用します。NNの公式helperにある行・列方向の不整合とbase workspace初期化、F16同梱AeroBenchVVの設定フィールド名差、SC helperのR2026aにおけるStopTime指定は、Falsify側の公式再生adapterで吸収します。
 
-### 未修正の公式checkoutによる全件確認
+### 未修正の公式checkoutによる過去の確認
 
-ARCH-COMP `5e8f72b8d5f30be002f40ae5df4a8e04d7f64e3c` の変更なしcheckoutを使い、現行49条件を4手法・1 episodeで再実行しました。全196件で入力検査、公式再生、成立／違反分類の一致が成功しています。全件表は `results/arch2025/final`、7モデルからRANDの代表1ケースずつを抜き出したコンパクトな結果は [arch2025_clean_checkout_smoke.csv](results/arch2025/compatibility/arch2025_clean_checkout_smoke.csv) に保存しています。この実行は接続互換性の検査であり、アルゴリズム性能評価には数えません。
+ARCH-COMP `5e8f72b8d5f30be002f40ae5df4a8e04d7f64e3c` の変更なしcheckoutを使い、旧方式で49条件を4手法・1 episodeで再実行しました。入力検査と公式再生は196/196件で完了しましたが、これは候補選択後の事後確認です。新方式では各episodeで同じ変更なしcheckoutを実行します。
 
 ## 実行
 
@@ -95,7 +98,7 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 /Applications/MATLAB_R2026a.app/bin/matlab -batch "validate_arch2025_all"
 ```
 
-中断後の再実行では、既定で `OverallPass=true` のケースをスキップします。分割実行結果を最終表へ組み立てる補助スクリプトは [assemble_arch2025_final_results.m](assemble_arch2025_final_results.m) です。
+中断後の再実行では、`OverallPass=true` に加えて、`EvaluationProtocol=arch-comp-2025-official-per-episode-v1` かつ `OfficialEvaluationCount=Episodes` のケースだけをスキップします。旧方式の結果は自動的に再実行対象になります。分割実行結果を最終表へ組み立てる補助スクリプトは [assemble_arch2025_final_results.m](assemble_arch2025_final_results.m) です。
 
 完全な一括runを公開用 `results/arch2025/final` へ反映する場合は、sourceを明示して集計します。
 
@@ -114,8 +117,8 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 
 ## 判定と既知の注意点
 
-最終判定は公式モデルを優先します。`OfficialRobustness < 0` を公式要求違反、`> 0` を要求成立として記録します。`FalsifyClassification` と `OfficialClassification` は `VIOLATED`、`SATISFIED`、`BOUNDARY` のいずれかです。
+`OfficialRobustness < 0` を公式要求違反、`> 0` を要求成立として記録します。新方式の `FalsifyRobustness` はFalsifyが実際に最適化した値であり、同じepisodeの `OfficialRobustness` と一致します。`WrapperRobustness` は候補生成用wrapper上の診断値です。
 
-`OverallPass` はFalsify完走、入力検査、公式再生、分類一致から決定します。数値軌道の一致は独立した診断列です。正式カタログ修正後の一括runで、`TrajectoryEquivalencePass` は6/196件です。残りには入力サンプリング、solver、logging、正規化等に由来する数値差があります。このため「公式判定一致」は確認済みですが、「全モデルで軌道が数値的に同一」とは主張しません。
+早期終了は `OfficialRobustness < 0` の場合だけ発生します。`OverallPass` には、Falsify完走、入力検査、公式評価、評価方式の一致、`OfficialEvaluationCount=Episodes`、Falsify目的値と公式値の一致が必要です。wrapperと公式モデルの軌跡一致は診断列として残しますが、wrapper側の符号は反例判定に影響しません。
 
 PMはローカルcheckoutに公式pacemakerモデルがないため第一段階から除外しています。FIM、複数seed性能比較、他ツール比較にはまだ着手していません。
