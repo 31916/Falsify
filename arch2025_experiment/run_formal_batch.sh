@@ -70,11 +70,6 @@ while IFS=$'\t' read -r sequence batch_id seed_index seed trial_id case_id model
   trial_manifest="$TRIAL_MANIFEST_ROOT/$trial_id"
   mkdir -p "$trial_run" "$trial_log" "$trial_manifest"
 
-  if [[ -f "$trial_run/complete.json" ]]; then
-    skipped_count=$((skipped_count + 1))
-    continue
-  fi
-
   attempt_number=1
   while [[ -d "$trial_manifest/attempt-$(printf '%03d' "$attempt_number")" || -d "$trial_run/attempt-$(printf '%03d' "$attempt_number")" ]]; do
     attempt_number=$((attempt_number + 1))

@@ -130,6 +130,18 @@ class FormalToolsProtocolTest(unittest.TestCase):
 
             self.assertIn(trial_id, output.getvalue())
 
+            (trial_root / "complete.json").write_text(json.dumps({
+                "EvaluationProtocol": FORMAL_TOOLS.EVALUATION_PROTOCOL,
+            }))
+            output = io.StringIO()
+            with redirect_stdout(output):
+                FORMAL_TOOLS.list_pending(SimpleNamespace(
+                    manifest=str(manifest),
+                    batch="s01_cc",
+                    run_root=str(run_root),
+                ))
+            self.assertEqual(output.getvalue(), "")
+
 
 if __name__ == "__main__":
     unittest.main()
