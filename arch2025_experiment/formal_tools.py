@@ -52,6 +52,13 @@ def number(value):
     return result
 
 
+def integer(value):
+    result = number(value)
+    if not math.isfinite(result) or not result.is_integer():
+        return None
+    return int(result)
+
+
 def read_csv(path):
     with open(path, newline="", encoding="utf-8-sig") as handle:
         return list(csv.DictReader(handle))
@@ -197,6 +204,8 @@ def parse_time_file(path):
 def validate_attempt(args):
     errors = []
     row = {}
+    episodes = None
+    official_evaluations = None
     if int(args.matlab_exit) != 0:
         errors.append(f"MATLAB exit code was {args.matlab_exit}")
     try:
@@ -210,10 +219,7 @@ def validate_attempt(args):
         row = rows[0]
         if row.get("CaseID") != args.case_id:
             errors.append("CaseID mismatch")
-        try:
-            actual_seed = int(float(row.get("Seed", "nan")))
-        except ValueError:
-            actual_seed = -1
+        actual_seed = integer(row.get("Seed"))
         if actual_seed != int(args.seed):
             errors.append("Seed mismatch")
         if row.get("Status") not in {"VALIDATED", "COMPLETE_MISMATCH"}:
@@ -238,18 +244,10 @@ def validate_attempt(args):
         if row.get("ObjectiveSource") != OBJECTIVE_SOURCE:
             errors.append(f"ObjectiveSource was {row.get('ObjectiveSource')!r}")
 
-        try:
-            episodes = int(float(row.get("Episodes", "nan")))
-        except ValueError:
-            episodes = -1
-        if not 1 <= episodes <= int(args.max_evaluations):
+        episodes = integer(row.get("Episodes"))
+        if episodes is None or not 1 <= episodes <= int(args.max_evaluations):
             errors.append(f"Episodes was {episodes}")
-        try:
-            official_evaluations = int(float(
-                row.get("OfficialEvaluationCount", "nan")
-            ))
-        except ValueError:
-            official_evaluations = -1
+        official_evaluations = integer(row.get("OfficialEvaluationCount"))
         if official_evaluations != episodes:
             errors.append(
                 "OfficialEvaluationCount did not equal Episodes "
@@ -276,7 +274,11 @@ def validate_attempt(args):
                 "Falsify objective robustness did not equal the official "
                 "per-episode robustness"
             )
-        if episodes < int(args.max_evaluations) and not official_robustness < 0:
+        if (
+            episodes is not None
+            and episodes < int(args.max_evaluations)
+            and not official_robustness < 0
+        ):
             errors.append(
                 "early termination occurred without negative "
                 "OfficialRobustness"
@@ -302,14 +304,16 @@ def validate_attempt(args):
         **timing,
     }
     if row:
-        episodes = int(float(row.get("Episodes", 0) or 0))
         official_robustness = number(row.get("OfficialRobustness"))
         reported_counterexample = number(row.get("FalsifyRobustness")) < 0
         official_counterexample = official_robustness < 0
         status.update({
             "Episodes": episodes,
             "OfficialEvaluationCount": official_evaluations,
-            "EarlyStopped": episodes < int(args.max_evaluations),
+            "EarlyStopped": (
+                episodes is not None
+                and episodes < int(args.max_evaluations)
+            ),
             "FalsifyRobustness": number(row.get("FalsifyRobustness")),
             "FalsifyReportedCounterexample": reported_counterexample,
             "OfficialRobustness": official_robustness,
