@@ -1,5 +1,5 @@
 function summary = summarize_fim_at(runDirectory)
-%SUMMARIZE_FIM_AT Compact, auditable report and representative waveforms.
+%SUMMARIZE_FIM_AT Frozen 10-fault preliminary report and waveforms.
 spec=fim_at_spec();
 a=readtable(fullfile(runDirectory,'experiment1.csv'),'TextType','string');
 b=readtable(fullfile(runDirectory,'experiment2.csv'),'TextType','string');

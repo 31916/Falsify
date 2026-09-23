@@ -1,6 +1,6 @@
 function test_fim_at_spec()
 % Boundary tests for the FIM profile, independently using dp_taliro.
-repo=fileparts(mfilename('fullpath')); oldPath=path;
+paths=fim_paths(); repo=paths.Repo; oldPath=path;
 cleanup=onCleanup(@()path(oldPath)); %#ok<NASGU>
 addpath(fullfile(repo,'s-taliro','dp_taliro'));
 s=fim_at_spec(); p=s.Preds;

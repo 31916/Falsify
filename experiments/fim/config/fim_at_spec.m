@@ -1,5 +1,5 @@
 function spec = fim_at_spec()
-%FIM_AT_SPEC Separate invariant profile; does not replace ARCH benchmark data.
+%FIM_AT_SPEC Frozen preliminary profile; does not replace ARCH benchmark data.
 % Official Engine/Integrator clips RPM to [600,6000]. ShiftLogic assigns
 % only gears 1..4. A 1 rpm / 0.5 gear margin avoids zero robustness at bounds.
 % This is a structural model argument, NOT a formal reachability certificate.

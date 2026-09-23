@@ -102,7 +102,7 @@ def main():
         '- 接続確認用pilotと中断した追加実験（additional_rl10、additional_psy_pilot*）は保持していますが、集計から除外しています。',
         '- 正式な追加結果: additional_rl10_v2/experiment2.csv、additional_psy10/*_PSY_ConBOLS_*.json。',
         '- 各フォルダのprotocol、runtime、code_snapshot、全候補MATを保存。元のモデル・上流FIM・Falsify coreは変更していません。',
-        '- ローカルFIMブランチ上の作業であり、pushしていません。', '',
+        '- ソースのGit状態と生成結果は別管理です。結果だけからpush状態は判断しません。', '',
         '## Ψ-TaLiRoとの対応', '',
         '[ARCH2025公式報告](https://easychair.org/publications/paper/xX5W/open)のConBO-LSを選択。',
         '報告が参照する[公式再現パッケージ](https://github.com/cpslab-asu/ARCH-Comp-2024-Repeatability)',

@@ -1,0 +1,22 @@
+{
+  "fim": {
+    "url": "https://gitlab.com/DrishtiYadav/fimtool.git",
+    "commit": "a110acf2b718eab4cdf65f938203f60009fa0510"
+  },
+  "arch": {
+    "url": "https://gitlab.com/goranf/ARCH-COMP.git",
+    "commit": "5e8f72b8d5f30be002f40ae5df4a8e04d7f64e3c",
+    "path": "models/FALS/transmission/Autotrans_shift.mdl",
+    "sha256": "a83d977ad6bb95420855c7df9b35cab33fc97c1e2b163fc052871967d44650c4"
+  },
+  "conbo": {
+    "url": "https://github.com/cpslab-asu/ConBO.git",
+    "commit": "532c4cd033dc373bf81b6505ea3389e7a4860b22"
+  },
+  "arch_repeatability": {
+    "url": "https://github.com/cpslab-asu/ARCH-Comp-2024-Repeatability.git",
+    "commit": "537de5951c6a2eabb6f4aca9739a7b0a15b95824"
+  },
+  "matlab": "R2026a",
+  "model_data": "sldemo_autotrans_data.mat from the licensed MATLAB Automatic Transmission Controller example; not redistributed"
+}

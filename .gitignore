@@ -5,9 +5,13 @@ slprj/*
 # Local Python environment
 .venv/
 .venv-falsify/
+.venv-fim-psy/
+.deps/
+**/__pycache__/
 
 # Reproducible FIM derived models, isolated upstream copies, and full traces.
 results/fim/runs/
+results/fim/calibration/
 
 # PySwarms (imported by the ARCH-pinned ConBO package) creates this log.
 /report.log

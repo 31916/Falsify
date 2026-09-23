@@ -1,4 +1,4 @@
-"""Independently audit saved FIM trajectories; no MATLAB or model edits."""
+"""Independently audit preliminary FIM trajectories; no model edits."""
 import argparse
 import csv
 from pathlib import Path

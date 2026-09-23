@@ -1,2 +1,4 @@
 *.slx binary
 
+# Unified diffs preserve upstream whitespace in context lines.
+experiments/fim/dependencies/*.patch -whitespace

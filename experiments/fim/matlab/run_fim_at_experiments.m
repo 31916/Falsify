@@ -4,8 +4,8 @@ function runDirectory = run_fim_at_experiments(stage, runDirectory, options)
 % Derived models/traces stay in ignored results/fim/runs; sources stay intact.
 if nargin < 1, stage = 'all'; end
 if nargin < 3, options=struct(); end
-repo = fileparts(mfilename('fullpath'));
-workspace = fileparts(repo);
+paths = fim_paths();
+repo = paths.Repo;
 spec = fim_at_spec();
 originalPath = path; originalDir = pwd; originalWarnings = warning;
 ownedBefore = find_system('type','block_diagram');
@@ -15,14 +15,13 @@ assert(isempty(conflicts),'Close these models manually before running: %s',strjo
 cleanup = onCleanup(@() restore_(originalDir, originalPath, originalWarnings, ownedBefore)); %#ok<NASGU>
 addpath(repo, fullfile(repo,'arch2025_generated'));
 addpath(fullfile(repo,'s-taliro','dp_taliro'),fullfile(repo,'s-taliro','monitor'));
-addpath(fullfile(workspace,'Examples','R2026a','simulink_automotive', ...
-    'ModelingAnAutomaticTransmissionControllerExample'));
+addpath(paths.ModelData);
 if nargin < 2 || isempty(runDirectory)
     assert(ismember(stage,{'all','prepare'}),'A run directory is required for this stage.');
     parent = fullfile(repo,'results','fim','runs');
     if ~isfolder(parent), mkdir(parent); end
     runDirectory = tempname(parent); mkdir(runDirectory);
-    source = fullfile(workspace,'ARCH-COMP','ARCH-COMP-full','models','FALS','transmission','Autotrans_shift.mdl');
+    source = paths.ATModel;
     manifest = struct('CreatedAt',char(datetime('now')),'MATLAB',version, ...
         'Source',source,'SourceSHA256',sha_(source), ...
         'FIMCommit','a110acf2b718eab4cdf65f938203f60009fa0510', ...
@@ -39,7 +38,7 @@ else
 end
 fprintf('FIM RUN: %s\n',runDirectory);
 if ismember(stage,{'all','prepare'})
-    prepare_(repo,workspace,runDirectory,spec,manifest);
+    prepare_(repo,paths,runDirectory,spec,manifest);
 end
 cases = load(fullfile(runDirectory,'cases.mat')); cases = cases.cases;
 addpath(fullfile(runDirectory,'models'));
@@ -79,10 +78,10 @@ assert(strcmp(manifest.SourceSHA256,sha_(manifest.Source)),'Official source chan
 fprintf('FIM stage %s complete: %s\n',stage,runDirectory);
 end
 
-function prepare_(repo,workspace,runDir,spec,manifest)
+function prepare_(repo,paths,runDir,spec,manifest)
 modelDir = fullfile(runDir,'models'); mkdir(modelDir);
-vendor = fullfile(workspace,'FIM','vendor','fimtool');
-compat = fullfile(workspace,'FIM','work','fimtool-r2026a');
+vendor = paths.FIMOriginal;
+compat = paths.FIMPatched;
 copyfile(fullfile(vendor,'FaultInjector_Master','FInjLib.slx'),fullfile(runDir,'FInjLib.slx'));
 assert(~bdIsLoaded('Autotrans_shift'),'Close the official AT model before preparing.');
 copyfile(manifest.Source,fullfile(modelDir,'fim_at_B00.mdl'));
@@ -101,12 +100,9 @@ for k=1:height(spec.Faults)
     for file={'FISingle.m','FCSingle.m','Init_sys_input.m','fault_suite.m','replace_suite.m','fim_arrange_system.m'}
         copyfile(fullfile(compat,file{1}),staging);
     end
-    % Narrow upstream substring level matching to this exact subsystem.
-    % In particular, root /gear must not also select ShiftLogic/gear.
-    fn=fullfile(staging,'fault_suite.m'); code=fileread(fn);
-    old='contains(block_inform{i}, level_final)';
-    assert(numel(strfind(code,old))==1);
-    write_(fn,strrep(code,old,'strcmp(block_inform{i}, level_final)'));
+    % Exact subsystem matching is in the tracked dependency patch.
+    assert(contains(fileread(fullfile(staging,'fault_suite.m')), ...
+        'strcmp(block_inform{i}, level_final)'));
     copyfile(fullfile(vendor,'LICENSE'),staging);
     copyfile(fullfile(vendor,'FaultInjector_Master','FInjLib.slx'),fullfile(staging,'FaultInjector_Master'));
     copyfile(fullfile(vendor,'Configuration','FIToolInitialization.mat'),fullfile(staging,'Configuration'));
@@ -346,7 +342,9 @@ if additional
         json_(fullfile(outputRoot,'protocol.json'),struct('Options',options,'Spec',spec));
         snapshot=fullfile(outputRoot,'code_snapshot'); mkdir(snapshot);
         for name={'run_fim_at_experiments.m','fim_at_spec.m','falsify.m','driver.py'}
-            copyfile(fullfile(repo,name{1}),snapshot);
+            if strcmp(name{1},'driver.py'), source=fullfile(repo,name{1});
+            else, source=which(name{1}); end
+            copyfile(source,snapshot);
         end
     end
 else

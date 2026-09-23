@@ -131,7 +131,8 @@ def main():
     assert args.budget > 0
     assert args.folder.startswith('additional_') and '/' not in args.folder and '..' not in args.folder
     assert set(args.cases) <= {'B00'} | {f'F{i:02}' for i in range(1,11)}
-    repo = Path(__file__).resolve().parent
+    experiment = Path(__file__).resolve().parents[1]
+    repo = experiment.parents[1]
     run = args.run.resolve()
     assert (run/'protocol.mat').is_file()
     root = run/args.folder
@@ -152,11 +153,13 @@ def main():
     snapshot.mkdir(exist_ok=True)
     for name in ['run_fim_psy.py','fim_psy_gpr.py','fim_at_external.m',
                  'run_fim_at_experiments.m','fim_at_spec.m']:
+        category = 'python' if name.endswith('.py') else ('config' if name == 'fim_at_spec.m' else 'matlab')
+        source = experiment/category/name
         target = snapshot/name
         if target.exists():
-            assert target.read_bytes() == (repo/name).read_bytes(), f'Code changed: {name}'
+            assert target.read_bytes() == source.read_bytes(), f'Code changed: {name}; use a new output folder'
         else:
-            shutil.copy2(repo/name, target)
+            shutil.copy2(source, target)
     versions = {p: importlib.metadata.version(p) for p in
                 ['psy-taliro','LSemiBO','rtamt','numpy','scipy','torch','botorch','gpytorch','matlabengine']}
     import lsemibo.coreAlgorithm.staliroIntegration as implementation
@@ -167,7 +170,8 @@ def main():
         [sys.executable,'-m','pip','freeze'], text=True))
     import matlab.engine
     engine = matlab.engine.start_matlab('-nodesktop -nosplash')
-    engine.addpath(str(repo), nargout=0)
+    engine.addpath(str(experiment), nargout=0)
+    engine.setup_fim(nargout=0)
     torch.set_num_threads(1)
     try:
         for case in args.cases:

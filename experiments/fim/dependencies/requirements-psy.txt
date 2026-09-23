@@ -1,4 +1,4 @@
-# Separate Python 3.9 environment. Do not install in .venv-falsify.
+# Separate Python 3.9 environment (.venv-fim-psy). Never install in .venv-falsify.
 # ARCH report's repeatability package pins ConBO and psy-taliro to these versions.
 LSemiBO @ git+https://github.com/cpslab-asu/ConBO.git@532c4cd033dc373bf81b6505ea3389e7a4860b22
 psy-taliro[rtamt]==1.0.0b9

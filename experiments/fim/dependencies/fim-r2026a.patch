@@ -1,0 +1,143 @@
+--- a/FISingle.m
++++ b/FISingle.m
+@@ -94,9 +94,10 @@
+ % Load the model
+ system = load_system([model_path, model_name_wo_ext, model_ext]);
+ 
+-if ismember('AutotransModel', model)
++% Match the complete model name, not individual characters in its path.
++if strcmp(model_name_wo_ext, 'AutotransModel')
+     set_param(system, 'Solver', 'ode4', 'StartTime','0', 'StopTime', '30', 'FixedStep', '0.04', 'ReturnWorkspaceOutputs', 'on');
+-else
++elseif strcmp(model_name_wo_ext, 'Aircraft')
+     set_param(system, 'Solver', 'ode4', 'StartTime','0', 'StopTime', '10', 'FixedStep', '0.01', 'ReturnWorkspaceOutputs', 'on');
+ end
+ 
+@@ -107,6 +108,10 @@
+ nb_lines = length(line_handles);
+ 
+ % In order to read information about signal ports, we need to compile the model
++original_simulation_mode = get_param(system, 'SimulationMode');
++if ~strcmpi(original_simulation_mode, 'normal')
++    set_param(system, 'SimulationMode', 'normal');
++end
+ eval(strcat(model_name, "([], [], [], 'compile');"));
+ for i = 1 : nb_lines
+     line_handle = line_handles(i);
+@@ -114,6 +119,9 @@
+     source_port_data_type{i} = get_param(source_port_handle, 'CompiledPortDataType');
+ end
+ eval(strcat(model_name, "([], [], [], 'term');"));
++if ~strcmpi(original_simulation_mode, 'normal')
++    set_param(system, 'SimulationMode', original_simulation_mode);
++end
+ 
+ %% First create a copy of the original model
+ 
+--- a/FCSingle.m
++++ b/FCSingle.m
+@@ -16,6 +16,12 @@
+ warning('off','all');
+ 
+ addpath('Configuration', 'FaultInjector_Master')
++
++% FIM's mask initialization updates linked library blocks. The library is
++% locked again when opened in a fresh MATLAB session, so unlock it before
++% loading and configuring the generated mutant.
++load_system('FInjLib');
++set_param('FInjLib', 'Lock', 'off');
+ 
+ % Initialize system inputs
+ [model, constants_thresholds, fault_injector_folder, Mainfolder, fault_list] = Init_sys_input(Faultinjector_config);
+@@ -121,9 +127,11 @@
+     
+     if fe == "Infinite time"
+        set_param(strcat(Fullpath, '/Step'), 'Time', fot);
++       set_param(strcat(Fullpath, '/Faulttype'), 'Value', '1');
+     else
+        set_param(strcat(Fullpath, '/Pulse Generator'), 'PhaseDelay', fot);
+        set_param(strcat(Fullpath, '/Pulse Generator'), 'PulseWidth', fd);
++       set_param(strcat(Fullpath, '/Faulttype'), 'Value', '2');
+     end
+     
+     set_param(Fullpath, 'FaultEffect', fe); % Set the fault effect
+@@ -132,6 +140,9 @@
+     end
+     if ft == "Bias/Offset" || ft == "Noise" || ft == "Package Drop"
+         set_param(Fullpath, 'FaultValue', fv);
++        if ft == "Bias/Offset"
++            set_param(strcat(Fullpath, '/Fault value'), 'Value', fv);
++        end
+     end
+     
+     if ft == "ROR" || ft == "LOR" || ft == "ASR"
+@@ -152,5 +163,3 @@
+ disp('Model successfully updated with selected faults and fault parameters!!!');
+ 
+ end
+-
+-
+--- a/fault_suite.m
++++ b/fault_suite.m
+@@ -43,7 +43,7 @@
+         condition_final = condition &&  isequal(S_dst{i}, Dst_or_OutportName);
+     end
+     
+-    condition_final = condition_final && contains(block_inform{i}, level_final);
++    condition_final = condition_final && strcmp(block_inform{i}, level_final);
+     
+     if ft == "Noise" || ft == "Bias/Offset" || ft == "Absolute" || ft == "Negate"
+         condition_final = condition_final && isequal(source_port_data_type{i}, 'double'); % for "Noise"/"Bias/Offset"/"Absolute/"Negate" : inject faults only in signals of type "double"
+@@ -190,7 +190,7 @@
+             set_param(FIBPH.Outport,'DataLogging','on');
+             set_param(FIBPH.Outport, 'DataLoggingNameMode', 'Custom');
+             set_param(FIBPH.Outport, 'DataLoggingName', sig_name{i});
+-            Simulink.BlockDiagram.arrangeSystem(block_inform{i});
++            fim_arrange_system(block_inform{i});
+             set_param(system, 'AutoInsertRateTranBlk','on');
+             save_system(system,[],'OverwriteIfChangedOnDisk',true);
+             k = k + 1;
+@@ -212,4 +212,3 @@
+ % Fault Event, Fault Event Value, Fault Effect, Fault Effect Value, Source block information and Destination Block Information
+ fault_table = table(My_faulty_model, My_faulty_block, Parentblock, Fault_Type, SRC_details, DST_details, SRC_port_number, DST_port_number);
+ 
+-
+--- a/replace_suite.m
++++ b/replace_suite.m
+@@ -148,13 +148,12 @@
+ 
+ set_param(system, 'AutoInsertRateTranBlk','on');
+ save_system(system,[],'OverwriteIfChangedOnDisk',true);
+-Simulink.BlockDiagram.arrangeSystem(level_final);
++fim_arrange_system(level_final);
+ if ParentBlock ~= "NA"
+-    Simulink.BlockDiagram.arrangeSystem(strcat(level_final,'/',ParentBlock));
++    fim_arrange_system(strcat(level_final,'/',ParentBlock));
+ end
+ 
+ % Save the table consisting of the name of the faulty model, the name of the fault injection block, the Parent block, Fault Type, Fault Value,
+ % Fault Event, Fault Event Value, Fault Effect, Fault Effect Value, Source block information and Destination Block Information
+ fault_table = table(My_faulty_model, My_faulty_block, Parentblock, Fault_Type, SRC_details, DST_details, SRC_port_number, DST_port_number);
+ 
+-
+--- /dev/null
++++ b/fim_arrange_system.m
+@@ -0,0 +1,18 @@
++function fim_arrange_system(system_name)
++%FIM_ARRANGE_SYSTEM Arrange a Simulink system across MATLAB releases.
++%
++% In MATLAB R2026a, arrangeSystem raises glee_util:messages:GenericError
++% when the current layout cannot be improved. Older FIM releases treated
++% the call as best-effort, so preserve that behavior while rethrowing real
++% layout failures.
++
++try
++    Simulink.BlockDiagram.arrangeSystem(system_name);
++catch exception
++    no_change = strcmp(exception.identifier, 'glee_util:messages:GenericError') ...
++        && contains(exception.message, 'Layout has not changed');
++    if ~no_change
++        rethrow(exception);
++    end
++end
++end

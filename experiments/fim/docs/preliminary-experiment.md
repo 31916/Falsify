@@ -1,4 +1,7 @@
-# FIM / AT 実験（独立した要件プロファイル）
+# FIM / AT 初回予備実験（2026-09-17、凍結プロファイル）
+
+この文書は初回実験の方法を保存しています。現在の配置・準備手順は
+[README](../README.md)を参照してください。以下のファイル名は移動後も同名です。
 
 ## 要件と正常系の根拠
 
@@ -84,6 +87,7 @@ Chainer は macOS を公式サポートしていません（[公式注意事項]
 
 ```matlab
 cd('/Users/harry/Documents/MATLAB/Falsify');
+addpath('experiments/fim'); setup_fim();
 runDirectory = run_fim_at_experiments('prepare');
 run_fim_at_experiments('exp1', runDirectory);
 run_fim_at_experiments('pilot', runDirectory); % 経路の疎通確認、集計対象外
@@ -92,7 +96,7 @@ summarize_fim_at(runDirectory);
 open_fim_at_case(runDirectory, 'F02');        % 任意: 故障モデルを開いて強調表示
 ```
 
-最後に `.venv-falsify/bin/python audit_fim_at.py <runDirectory>` で、
+最後に `.venv-falsify/bin/python experiments/fim/python/audit_fim_at.py <runDirectory>` で、
 保存された全候補の入力制約・正常系・故障演算・ロバストネス・探索集計を独立検査できます。
 
 `results/fim/runs/<一意 ID>/` に manifest、故障カタログ、モデル、FIM の Fault_table、
@@ -106,21 +110,21 @@ R2026a 互換修正に加え、挿入先の階層は部分一致から完全一�
 ## A3C・DDQN・Ψ-TaLiRoの追加比較
 
 元の `fim_at_spec` / protocol は凍結したまま、追加設定と結果を別フォルダに保存します。
-Gitの `FIM` はローカル作業用です。ユーザーの指示があるまでpushしません。
+Gitの `FIM` ブランチで管理します。公開操作はユーザーの指示に従います。
 
 ```matlab
 options = struct('Algorithms',{{'A3C','DDQN'}},'MaxEpisodes',10,'Folder','additional_rl10_v2');
 run_fim_at_experiments('additional', runDirectory, options);
 ```
 
-Ψ-TaLiRoは独立したPython 3.9環境 `../FIM/.venv-psy-arch` を使用します。
-依存関係は `requirements-fim-psy.txt`、実際の全バージョンは結果フォルダのlockに保存します。
+Ψ-TaLiRoは独立したPython 3.9環境を使用します（初回は `../FIM/.venv-psy-arch`）。
+依存関係は `dependencies/requirements-psy.txt`、実際の全バージョンは結果フォルダのlockに保存します。
 FalsifyのPython環境・coreファイルは変更しません。
 
 ```sh
-../FIM/.venv-psy-arch/bin/python test_fim_psy.py <runDirectory>
-../FIM/.venv-psy-arch/bin/python -u run_fim_psy.py <runDirectory>
-.venv-falsify/bin/python compare_fim_tools.py <runDirectory>
+.venv-fim-psy/bin/python experiments/fim/tests/test_fim_psy.py <runDirectory>
+.venv-fim-psy/bin/python -u experiments/fim/python/run_fim_psy.py <runDirectory>
+.venv-falsify/bin/python experiments/fim/python/compare_fim_tools.py <runDirectory>
 ```
 
 ARCH2025論文の公式再現リンクは `ARCH-Comp-2024-Repeatability` です。

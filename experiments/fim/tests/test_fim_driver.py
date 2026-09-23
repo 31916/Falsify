@@ -1,5 +1,9 @@
 """Test bounded actions and real weight updates, independently of AT results."""
 import random
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
 import numpy as np
 
