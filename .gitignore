@@ -6,6 +6,12 @@ slprj/*
 .venv/
 .venv-falsify/
 
+# Reproducible FIM derived models, isolated upstream copies, and full traces.
+results/fim/runs/
+
+# PySwarms (imported by the ARCH-pinned ConBO package) creates this log.
+/report.log
+
 # MATLAB / Simulink generated files
 *.slxc
 *.slx.r20*
