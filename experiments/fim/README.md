@@ -4,6 +4,12 @@
 最初に `config/fim_at_spec.m`（初回予備実験の凍結設定）を読み、
 `matlab/run_fim_at_experiments.m` の `prepare_` でFIMへの接続を確認できます。
 
+RPM正加算の調査は [準備実験の説明](docs/rpm-calibration.md) と
+`config/rpm_calibration.json` を使います。初回の10故障設定は上書きしません。
+確認済みの結果は [RPM調査結果](docs/rpm-calibration-results.md)、
+全入力の境界と監査要約は [数値根拠](docs/rpm-calibration-evidence.json)、
+実際に使った入力波形の値は [固定入力](docs/rpm-calibration-inputs.json) です。
+
 ## 配置
 
 | フォルダ | 内容 | Git管理 |

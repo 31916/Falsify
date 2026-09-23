@@ -1,0 +1,5119 @@
+[
+  {
+    "ID": "U01",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U01",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        15,
+        0,
+        0
+      ],
+      [
+        20,
+        0,
+        0
+      ],
+      [
+        25,
+        0,
+        0
+      ],
+      [
+        30,
+        0,
+        0
+      ]
+    ],
+    "SourceSHA256": "2354d685bb00a23ab8fb9d894987aaa3ccfe376d8e513da27c3aa0369d9c34b2"
+  },
+  {
+    "ID": "U02",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U02",
+    "U": [
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "a3ab75ad7b8e46a380d13f257ac8a08df6e37bb8806a502d222efd7286c38515"
+  },
+  {
+    "ID": "U03",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U03",
+    "U": [
+      [
+        0,
+        0,
+        325
+      ],
+      [
+        5,
+        0,
+        325
+      ],
+      [
+        10,
+        0,
+        325
+      ],
+      [
+        15,
+        0,
+        325
+      ],
+      [
+        20,
+        0,
+        325
+      ],
+      [
+        25,
+        0,
+        325
+      ],
+      [
+        30,
+        0,
+        325
+      ]
+    ],
+    "SourceSHA256": "8227838938a42fec98648b48404f72490ccc982da397e0821f1a8165bb664d18"
+  },
+  {
+    "ID": "U04",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U04",
+    "U": [
+      [
+        0,
+        100,
+        325
+      ],
+      [
+        5,
+        100,
+        325
+      ],
+      [
+        10,
+        100,
+        325
+      ],
+      [
+        15,
+        100,
+        325
+      ],
+      [
+        20,
+        100,
+        325
+      ],
+      [
+        25,
+        100,
+        325
+      ],
+      [
+        30,
+        100,
+        325
+      ]
+    ],
+    "SourceSHA256": "1c2c8fbc23f36b623ad78a2e646ae7bfdf84bffea6cede2d9ae5ee1a0e6f666f"
+  },
+  {
+    "ID": "U05",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U05",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        50,
+        0
+      ],
+      [
+        15,
+        50,
+        0
+      ],
+      [
+        20,
+        50,
+        0
+      ],
+      [
+        25,
+        50,
+        0
+      ],
+      [
+        30,
+        50,
+        0
+      ]
+    ],
+    "SourceSHA256": "b3485bfd0c222afe9c07dc3069d3924b2078e5f6c42acf257a84c09726e9845d"
+  },
+  {
+    "ID": "U06",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U06",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        20,
+        0
+      ],
+      [
+        10,
+        40,
+        0
+      ],
+      [
+        15,
+        60,
+        0
+      ],
+      [
+        20,
+        80,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "44c0bdde4e1f6b871c94ae69893aae7e55aaa327d614c0fa07462ed288e7ce69"
+  },
+  {
+    "ID": "U07",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U07",
+    "U": [
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        0,
+        325
+      ],
+      [
+        15,
+        0,
+        325
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "70704d8258a459eb930c91acd3e8712114398393cfee5839df551de1891e25f4"
+  },
+  {
+    "ID": "U08",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U08",
+    "U": [
+      [
+        0,
+        0,
+        325
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        0,
+        325
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        0,
+        325
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "63fa8b21cd1dd00a68c8f8e1859781ae6c8d4b7a50b16f8da46eba5275ae07eb"
+  },
+  {
+    "ID": "U09",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U09",
+    "U": [
+      [
+        0,
+        38.50465601535258,
+        206.66958509499014
+      ],
+      [
+        5,
+        40.567308020438062,
+        324.1746661636069
+      ],
+      [
+        10,
+        63.207987810593892,
+        46.1382459396576
+      ],
+      [
+        15,
+        69.879338871585446,
+        175.94156837729642
+      ],
+      [
+        20,
+        23.723972815609194,
+        218.20159652767461
+      ],
+      [
+        25,
+        76.239548532352288,
+        211.38635838959641
+      ],
+      [
+        30,
+        76.239548532352288,
+        211.38635838959641
+      ]
+    ],
+    "SourceSHA256": "c47022247051aac19e1cfec5b2e6a004c5b33a18b7961bfe7c50fde5bfc06ec7"
+  },
+  {
+    "ID": "U10",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U10",
+    "U": [
+      [
+        0,
+        77.700303268908115,
+        109.75225989950354
+      ],
+      [
+        5,
+        0.28611374887883567,
+        242.26559934973429
+      ],
+      [
+        10,
+        30.574131130651207,
+        25.17672862834544
+      ],
+      [
+        15,
+        90.43991989137821,
+        12.682553030287986
+      ],
+      [
+        20,
+        23.726767748597567,
+        50.490263926382525
+      ],
+      [
+        25,
+        52.85076966027448,
+        310.82582288549975
+      ],
+      [
+        30,
+        52.85076966027448,
+        310.82582288549975
+      ]
+    ],
+    "SourceSHA256": "5ac9ade2c79ec20b55c9f624d2c19d3001718cbcc005f64a5c217f8e549b021a"
+  },
+  {
+    "ID": "U11",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U11",
+    "U": [
+      [
+        0,
+        25.013486381264947,
+        307.12647804836377
+      ],
+      [
+        5,
+        7.7311069129133214,
+        101.26973102990674
+      ],
+      [
+        10,
+        79.504834195496713,
+        215.3832678016966
+      ],
+      [
+        15,
+        7.7050373445664455,
+        69.665611227807076
+      ],
+      [
+        20,
+        64.717974378146167,
+        19.084030638784341
+      ],
+      [
+        25,
+        15.363558878853445,
+        100.31315213943523
+      ],
+      [
+        30,
+        15.363558878853445,
+        100.31315213943523
+      ]
+    ],
+    "SourceSHA256": "e26609d0b3b0baaa1ac8de4bb502d39d110afaf97dfcfada132b706d88e16a13"
+  },
+  {
+    "ID": "U12",
+    "Group": "legacy12",
+    "Description": "Historical fixed input U12",
+    "U": [
+      [
+        0,
+        60.160103104994334,
+        234.4960793503862
+      ],
+      [
+        5,
+        34.193738432087763,
+        204.82800822334028
+      ],
+      [
+        10,
+        65.465955298315663,
+        93.955807798662008
+      ],
+      [
+        15,
+        59.014048986925971,
+        308.15192481381837
+      ],
+      [
+        20,
+        69.901127448332971,
+        217.60797819925369
+      ],
+      [
+        25,
+        20.923696676349735,
+        245.96667560712865
+      ],
+      [
+        30,
+        20.923696676349735,
+        245.96667560712865
+      ]
+    ],
+    "SourceSHA256": "2738af63b09befc6e38cea87e006a060becd3fcf97c489e1f494c9a43050bbf1"
+  },
+  {
+    "ID": "D001",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=0 brake=50",
+    "U": [
+      [
+        0,
+        0,
+        50
+      ],
+      [
+        5,
+        0,
+        50
+      ],
+      [
+        10,
+        0,
+        50
+      ],
+      [
+        15,
+        0,
+        50
+      ],
+      [
+        20,
+        0,
+        50
+      ],
+      [
+        25,
+        0,
+        50
+      ],
+      [
+        30,
+        0,
+        50
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D002",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=0 brake=100",
+    "U": [
+      [
+        0,
+        0,
+        100
+      ],
+      [
+        5,
+        0,
+        100
+      ],
+      [
+        10,
+        0,
+        100
+      ],
+      [
+        15,
+        0,
+        100
+      ],
+      [
+        20,
+        0,
+        100
+      ],
+      [
+        25,
+        0,
+        100
+      ],
+      [
+        30,
+        0,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D003",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=0 brake=200",
+    "U": [
+      [
+        0,
+        0,
+        200
+      ],
+      [
+        5,
+        0,
+        200
+      ],
+      [
+        10,
+        0,
+        200
+      ],
+      [
+        15,
+        0,
+        200
+      ],
+      [
+        20,
+        0,
+        200
+      ],
+      [
+        25,
+        0,
+        200
+      ],
+      [
+        30,
+        0,
+        200
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D004",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=25 brake=0",
+    "U": [
+      [
+        0,
+        25,
+        0
+      ],
+      [
+        5,
+        25,
+        0
+      ],
+      [
+        10,
+        25,
+        0
+      ],
+      [
+        15,
+        25,
+        0
+      ],
+      [
+        20,
+        25,
+        0
+      ],
+      [
+        25,
+        25,
+        0
+      ],
+      [
+        30,
+        25,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D005",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=25 brake=50",
+    "U": [
+      [
+        0,
+        25,
+        50
+      ],
+      [
+        5,
+        25,
+        50
+      ],
+      [
+        10,
+        25,
+        50
+      ],
+      [
+        15,
+        25,
+        50
+      ],
+      [
+        20,
+        25,
+        50
+      ],
+      [
+        25,
+        25,
+        50
+      ],
+      [
+        30,
+        25,
+        50
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D006",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=25 brake=100",
+    "U": [
+      [
+        0,
+        25,
+        100
+      ],
+      [
+        5,
+        25,
+        100
+      ],
+      [
+        10,
+        25,
+        100
+      ],
+      [
+        15,
+        25,
+        100
+      ],
+      [
+        20,
+        25,
+        100
+      ],
+      [
+        25,
+        25,
+        100
+      ],
+      [
+        30,
+        25,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D007",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=25 brake=200",
+    "U": [
+      [
+        0,
+        25,
+        200
+      ],
+      [
+        5,
+        25,
+        200
+      ],
+      [
+        10,
+        25,
+        200
+      ],
+      [
+        15,
+        25,
+        200
+      ],
+      [
+        20,
+        25,
+        200
+      ],
+      [
+        25,
+        25,
+        200
+      ],
+      [
+        30,
+        25,
+        200
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D008",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=25 brake=325",
+    "U": [
+      [
+        0,
+        25,
+        325
+      ],
+      [
+        5,
+        25,
+        325
+      ],
+      [
+        10,
+        25,
+        325
+      ],
+      [
+        15,
+        25,
+        325
+      ],
+      [
+        20,
+        25,
+        325
+      ],
+      [
+        25,
+        25,
+        325
+      ],
+      [
+        30,
+        25,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D009",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=50 brake=50",
+    "U": [
+      [
+        0,
+        50,
+        50
+      ],
+      [
+        5,
+        50,
+        50
+      ],
+      [
+        10,
+        50,
+        50
+      ],
+      [
+        15,
+        50,
+        50
+      ],
+      [
+        20,
+        50,
+        50
+      ],
+      [
+        25,
+        50,
+        50
+      ],
+      [
+        30,
+        50,
+        50
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D010",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=50 brake=100",
+    "U": [
+      [
+        0,
+        50,
+        100
+      ],
+      [
+        5,
+        50,
+        100
+      ],
+      [
+        10,
+        50,
+        100
+      ],
+      [
+        15,
+        50,
+        100
+      ],
+      [
+        20,
+        50,
+        100
+      ],
+      [
+        25,
+        50,
+        100
+      ],
+      [
+        30,
+        50,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D011",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=50 brake=200",
+    "U": [
+      [
+        0,
+        50,
+        200
+      ],
+      [
+        5,
+        50,
+        200
+      ],
+      [
+        10,
+        50,
+        200
+      ],
+      [
+        15,
+        50,
+        200
+      ],
+      [
+        20,
+        50,
+        200
+      ],
+      [
+        25,
+        50,
+        200
+      ],
+      [
+        30,
+        50,
+        200
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D012",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=50 brake=325",
+    "U": [
+      [
+        0,
+        50,
+        325
+      ],
+      [
+        5,
+        50,
+        325
+      ],
+      [
+        10,
+        50,
+        325
+      ],
+      [
+        15,
+        50,
+        325
+      ],
+      [
+        20,
+        50,
+        325
+      ],
+      [
+        25,
+        50,
+        325
+      ],
+      [
+        30,
+        50,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D013",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=75 brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        75,
+        0
+      ],
+      [
+        15,
+        75,
+        0
+      ],
+      [
+        20,
+        75,
+        0
+      ],
+      [
+        25,
+        75,
+        0
+      ],
+      [
+        30,
+        75,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D014",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=75 brake=50",
+    "U": [
+      [
+        0,
+        75,
+        50
+      ],
+      [
+        5,
+        75,
+        50
+      ],
+      [
+        10,
+        75,
+        50
+      ],
+      [
+        15,
+        75,
+        50
+      ],
+      [
+        20,
+        75,
+        50
+      ],
+      [
+        25,
+        75,
+        50
+      ],
+      [
+        30,
+        75,
+        50
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D015",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=75 brake=100",
+    "U": [
+      [
+        0,
+        75,
+        100
+      ],
+      [
+        5,
+        75,
+        100
+      ],
+      [
+        10,
+        75,
+        100
+      ],
+      [
+        15,
+        75,
+        100
+      ],
+      [
+        20,
+        75,
+        100
+      ],
+      [
+        25,
+        75,
+        100
+      ],
+      [
+        30,
+        75,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D016",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=75 brake=200",
+    "U": [
+      [
+        0,
+        75,
+        200
+      ],
+      [
+        5,
+        75,
+        200
+      ],
+      [
+        10,
+        75,
+        200
+      ],
+      [
+        15,
+        75,
+        200
+      ],
+      [
+        20,
+        75,
+        200
+      ],
+      [
+        25,
+        75,
+        200
+      ],
+      [
+        30,
+        75,
+        200
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D017",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=75 brake=325",
+    "U": [
+      [
+        0,
+        75,
+        325
+      ],
+      [
+        5,
+        75,
+        325
+      ],
+      [
+        10,
+        75,
+        325
+      ],
+      [
+        15,
+        75,
+        325
+      ],
+      [
+        20,
+        75,
+        325
+      ],
+      [
+        25,
+        75,
+        325
+      ],
+      [
+        30,
+        75,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D018",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=85 brake=0",
+    "U": [
+      [
+        0,
+        85,
+        0
+      ],
+      [
+        5,
+        85,
+        0
+      ],
+      [
+        10,
+        85,
+        0
+      ],
+      [
+        15,
+        85,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D019",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=85 brake=50",
+    "U": [
+      [
+        0,
+        85,
+        50
+      ],
+      [
+        5,
+        85,
+        50
+      ],
+      [
+        10,
+        85,
+        50
+      ],
+      [
+        15,
+        85,
+        50
+      ],
+      [
+        20,
+        85,
+        50
+      ],
+      [
+        25,
+        85,
+        50
+      ],
+      [
+        30,
+        85,
+        50
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D020",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=85 brake=100",
+    "U": [
+      [
+        0,
+        85,
+        100
+      ],
+      [
+        5,
+        85,
+        100
+      ],
+      [
+        10,
+        85,
+        100
+      ],
+      [
+        15,
+        85,
+        100
+      ],
+      [
+        20,
+        85,
+        100
+      ],
+      [
+        25,
+        85,
+        100
+      ],
+      [
+        30,
+        85,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D021",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=85 brake=200",
+    "U": [
+      [
+        0,
+        85,
+        200
+      ],
+      [
+        5,
+        85,
+        200
+      ],
+      [
+        10,
+        85,
+        200
+      ],
+      [
+        15,
+        85,
+        200
+      ],
+      [
+        20,
+        85,
+        200
+      ],
+      [
+        25,
+        85,
+        200
+      ],
+      [
+        30,
+        85,
+        200
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D022",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=85 brake=325",
+    "U": [
+      [
+        0,
+        85,
+        325
+      ],
+      [
+        5,
+        85,
+        325
+      ],
+      [
+        10,
+        85,
+        325
+      ],
+      [
+        15,
+        85,
+        325
+      ],
+      [
+        20,
+        85,
+        325
+      ],
+      [
+        25,
+        85,
+        325
+      ],
+      [
+        30,
+        85,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D023",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=90 brake=0",
+    "U": [
+      [
+        0,
+        90,
+        0
+      ],
+      [
+        5,
+        90,
+        0
+      ],
+      [
+        10,
+        90,
+        0
+      ],
+      [
+        15,
+        90,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D024",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=90 brake=50",
+    "U": [
+      [
+        0,
+        90,
+        50
+      ],
+      [
+        5,
+        90,
+        50
+      ],
+      [
+        10,
+        90,
+        50
+      ],
+      [
+        15,
+        90,
+        50
+      ],
+      [
+        20,
+        90,
+        50
+      ],
+      [
+        25,
+        90,
+        50
+      ],
+      [
+        30,
+        90,
+        50
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D025",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=90 brake=100",
+    "U": [
+      [
+        0,
+        90,
+        100
+      ],
+      [
+        5,
+        90,
+        100
+      ],
+      [
+        10,
+        90,
+        100
+      ],
+      [
+        15,
+        90,
+        100
+      ],
+      [
+        20,
+        90,
+        100
+      ],
+      [
+        25,
+        90,
+        100
+      ],
+      [
+        30,
+        90,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D026",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=90 brake=200",
+    "U": [
+      [
+        0,
+        90,
+        200
+      ],
+      [
+        5,
+        90,
+        200
+      ],
+      [
+        10,
+        90,
+        200
+      ],
+      [
+        15,
+        90,
+        200
+      ],
+      [
+        20,
+        90,
+        200
+      ],
+      [
+        25,
+        90,
+        200
+      ],
+      [
+        30,
+        90,
+        200
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D027",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=90 brake=325",
+    "U": [
+      [
+        0,
+        90,
+        325
+      ],
+      [
+        5,
+        90,
+        325
+      ],
+      [
+        10,
+        90,
+        325
+      ],
+      [
+        15,
+        90,
+        325
+      ],
+      [
+        20,
+        90,
+        325
+      ],
+      [
+        25,
+        90,
+        325
+      ],
+      [
+        30,
+        90,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D028",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=95 brake=0",
+    "U": [
+      [
+        0,
+        95,
+        0
+      ],
+      [
+        5,
+        95,
+        0
+      ],
+      [
+        10,
+        95,
+        0
+      ],
+      [
+        15,
+        95,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D029",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=95 brake=50",
+    "U": [
+      [
+        0,
+        95,
+        50
+      ],
+      [
+        5,
+        95,
+        50
+      ],
+      [
+        10,
+        95,
+        50
+      ],
+      [
+        15,
+        95,
+        50
+      ],
+      [
+        20,
+        95,
+        50
+      ],
+      [
+        25,
+        95,
+        50
+      ],
+      [
+        30,
+        95,
+        50
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D030",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=95 brake=100",
+    "U": [
+      [
+        0,
+        95,
+        100
+      ],
+      [
+        5,
+        95,
+        100
+      ],
+      [
+        10,
+        95,
+        100
+      ],
+      [
+        15,
+        95,
+        100
+      ],
+      [
+        20,
+        95,
+        100
+      ],
+      [
+        25,
+        95,
+        100
+      ],
+      [
+        30,
+        95,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D031",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=95 brake=200",
+    "U": [
+      [
+        0,
+        95,
+        200
+      ],
+      [
+        5,
+        95,
+        200
+      ],
+      [
+        10,
+        95,
+        200
+      ],
+      [
+        15,
+        95,
+        200
+      ],
+      [
+        20,
+        95,
+        200
+      ],
+      [
+        25,
+        95,
+        200
+      ],
+      [
+        30,
+        95,
+        200
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D032",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=95 brake=325",
+    "U": [
+      [
+        0,
+        95,
+        325
+      ],
+      [
+        5,
+        95,
+        325
+      ],
+      [
+        10,
+        95,
+        325
+      ],
+      [
+        15,
+        95,
+        325
+      ],
+      [
+        20,
+        95,
+        325
+      ],
+      [
+        25,
+        95,
+        325
+      ],
+      [
+        30,
+        95,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D033",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=100 brake=50",
+    "U": [
+      [
+        0,
+        100,
+        50
+      ],
+      [
+        5,
+        100,
+        50
+      ],
+      [
+        10,
+        100,
+        50
+      ],
+      [
+        15,
+        100,
+        50
+      ],
+      [
+        20,
+        100,
+        50
+      ],
+      [
+        25,
+        100,
+        50
+      ],
+      [
+        30,
+        100,
+        50
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D034",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=100 brake=100",
+    "U": [
+      [
+        0,
+        100,
+        100
+      ],
+      [
+        5,
+        100,
+        100
+      ],
+      [
+        10,
+        100,
+        100
+      ],
+      [
+        15,
+        100,
+        100
+      ],
+      [
+        20,
+        100,
+        100
+      ],
+      [
+        25,
+        100,
+        100
+      ],
+      [
+        30,
+        100,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D035",
+    "Group": "additional_fixed",
+    "Description": "constant throttle=100 brake=200",
+    "U": [
+      [
+        0,
+        100,
+        200
+      ],
+      [
+        5,
+        100,
+        200
+      ],
+      [
+        10,
+        100,
+        200
+      ],
+      [
+        15,
+        100,
+        200
+      ],
+      [
+        20,
+        100,
+        200
+      ],
+      [
+        25,
+        100,
+        200
+      ],
+      [
+        30,
+        100,
+        200
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D036",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->85 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        85,
+        0
+      ],
+      [
+        10,
+        85,
+        0
+      ],
+      [
+        15,
+        85,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D037",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->85 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        85,
+        0
+      ],
+      [
+        15,
+        85,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D038",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->85 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        15,
+        85,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D039",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->85 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        15,
+        0,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D040",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->90 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        90,
+        0
+      ],
+      [
+        10,
+        90,
+        0
+      ],
+      [
+        15,
+        90,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D041",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->90 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        90,
+        0
+      ],
+      [
+        15,
+        90,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D042",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->90 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        15,
+        90,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D043",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->90 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        15,
+        0,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D044",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->95 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        95,
+        0
+      ],
+      [
+        10,
+        95,
+        0
+      ],
+      [
+        15,
+        95,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D045",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->95 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        95,
+        0
+      ],
+      [
+        15,
+        95,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D046",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->95 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        15,
+        95,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D047",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->95 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        15,
+        0,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D048",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->100 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D049",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->100 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D050",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->100 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D051",
+    "Group": "additional_fixed",
+    "Description": "throttle 0->100 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0
+      ],
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        15,
+        0,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D052",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->85 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        85,
+        0
+      ],
+      [
+        10,
+        85,
+        0
+      ],
+      [
+        15,
+        85,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D053",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->85 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        85,
+        0
+      ],
+      [
+        15,
+        85,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D054",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->85 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        50,
+        0
+      ],
+      [
+        15,
+        85,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D055",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->85 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        50,
+        0
+      ],
+      [
+        15,
+        50,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D056",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->90 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        90,
+        0
+      ],
+      [
+        10,
+        90,
+        0
+      ],
+      [
+        15,
+        90,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D057",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->90 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        90,
+        0
+      ],
+      [
+        15,
+        90,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D058",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->90 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        50,
+        0
+      ],
+      [
+        15,
+        90,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D059",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->90 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        50,
+        0
+      ],
+      [
+        15,
+        50,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D060",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->95 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        95,
+        0
+      ],
+      [
+        10,
+        95,
+        0
+      ],
+      [
+        15,
+        95,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D061",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->95 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        95,
+        0
+      ],
+      [
+        15,
+        95,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D062",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->95 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        50,
+        0
+      ],
+      [
+        15,
+        95,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D063",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->95 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        50,
+        0
+      ],
+      [
+        15,
+        50,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D064",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->100 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D065",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->100 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D066",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->100 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        50,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D067",
+    "Group": "additional_fixed",
+    "Description": "throttle 50->100 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        50,
+        0
+      ],
+      [
+        5,
+        50,
+        0
+      ],
+      [
+        10,
+        50,
+        0
+      ],
+      [
+        15,
+        50,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D068",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->85 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        85,
+        0
+      ],
+      [
+        10,
+        85,
+        0
+      ],
+      [
+        15,
+        85,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D069",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->85 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        85,
+        0
+      ],
+      [
+        15,
+        85,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D070",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->85 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        75,
+        0
+      ],
+      [
+        15,
+        85,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D071",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->85 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        75,
+        0
+      ],
+      [
+        15,
+        75,
+        0
+      ],
+      [
+        20,
+        85,
+        0
+      ],
+      [
+        25,
+        85,
+        0
+      ],
+      [
+        30,
+        85,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D072",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->90 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        90,
+        0
+      ],
+      [
+        10,
+        90,
+        0
+      ],
+      [
+        15,
+        90,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D073",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->90 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        90,
+        0
+      ],
+      [
+        15,
+        90,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D074",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->90 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        75,
+        0
+      ],
+      [
+        15,
+        90,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D075",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->90 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        75,
+        0
+      ],
+      [
+        15,
+        75,
+        0
+      ],
+      [
+        20,
+        90,
+        0
+      ],
+      [
+        25,
+        90,
+        0
+      ],
+      [
+        30,
+        90,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D076",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->95 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        95,
+        0
+      ],
+      [
+        10,
+        95,
+        0
+      ],
+      [
+        15,
+        95,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D077",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->95 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        95,
+        0
+      ],
+      [
+        15,
+        95,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D078",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->95 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        75,
+        0
+      ],
+      [
+        15,
+        95,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D079",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->95 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        75,
+        0
+      ],
+      [
+        15,
+        75,
+        0
+      ],
+      [
+        20,
+        95,
+        0
+      ],
+      [
+        25,
+        95,
+        0
+      ],
+      [
+        30,
+        95,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D080",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->100 at 5s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D081",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->100 at 10s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D082",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->100 at 15s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        75,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D083",
+    "Group": "additional_fixed",
+    "Description": "throttle 75->100 at 20s; brake=0",
+    "U": [
+      [
+        0,
+        75,
+        0
+      ],
+      [
+        5,
+        75,
+        0
+      ],
+      [
+        10,
+        75,
+        0
+      ],
+      [
+        15,
+        75,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D084",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 0->100 at 5s",
+    "U": [
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        5,
+        100,
+        100
+      ],
+      [
+        10,
+        100,
+        100
+      ],
+      [
+        15,
+        100,
+        100
+      ],
+      [
+        20,
+        100,
+        100
+      ],
+      [
+        25,
+        100,
+        100
+      ],
+      [
+        30,
+        100,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D085",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 0->100 at 10s",
+    "U": [
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        100
+      ],
+      [
+        15,
+        100,
+        100
+      ],
+      [
+        20,
+        100,
+        100
+      ],
+      [
+        25,
+        100,
+        100
+      ],
+      [
+        30,
+        100,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D086",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 0->100 at 15s",
+    "U": [
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        100
+      ],
+      [
+        20,
+        100,
+        100
+      ],
+      [
+        25,
+        100,
+        100
+      ],
+      [
+        30,
+        100,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D087",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 0->100 at 20s",
+    "U": [
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        100
+      ],
+      [
+        25,
+        100,
+        100
+      ],
+      [
+        30,
+        100,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D088",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 0->325 at 5s",
+    "U": [
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        5,
+        100,
+        325
+      ],
+      [
+        10,
+        100,
+        325
+      ],
+      [
+        15,
+        100,
+        325
+      ],
+      [
+        20,
+        100,
+        325
+      ],
+      [
+        25,
+        100,
+        325
+      ],
+      [
+        30,
+        100,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D089",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 0->325 at 10s",
+    "U": [
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        325
+      ],
+      [
+        15,
+        100,
+        325
+      ],
+      [
+        20,
+        100,
+        325
+      ],
+      [
+        25,
+        100,
+        325
+      ],
+      [
+        30,
+        100,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D090",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 0->325 at 15s",
+    "U": [
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        325
+      ],
+      [
+        20,
+        100,
+        325
+      ],
+      [
+        25,
+        100,
+        325
+      ],
+      [
+        30,
+        100,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D091",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 0->325 at 20s",
+    "U": [
+      [
+        0,
+        100,
+        0
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        325
+      ],
+      [
+        25,
+        100,
+        325
+      ],
+      [
+        30,
+        100,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D092",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 100->0 at 5s",
+    "U": [
+      [
+        0,
+        100,
+        100
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D093",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 100->0 at 10s",
+    "U": [
+      [
+        0,
+        100,
+        100
+      ],
+      [
+        5,
+        100,
+        100
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D094",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 100->0 at 15s",
+    "U": [
+      [
+        0,
+        100,
+        100
+      ],
+      [
+        5,
+        100,
+        100
+      ],
+      [
+        10,
+        100,
+        100
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D095",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 100->0 at 20s",
+    "U": [
+      [
+        0,
+        100,
+        100
+      ],
+      [
+        5,
+        100,
+        100
+      ],
+      [
+        10,
+        100,
+        100
+      ],
+      [
+        15,
+        100,
+        100
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D096",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 100->325 at 5s",
+    "U": [
+      [
+        0,
+        100,
+        100
+      ],
+      [
+        5,
+        100,
+        325
+      ],
+      [
+        10,
+        100,
+        325
+      ],
+      [
+        15,
+        100,
+        325
+      ],
+      [
+        20,
+        100,
+        325
+      ],
+      [
+        25,
+        100,
+        325
+      ],
+      [
+        30,
+        100,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D097",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 100->325 at 10s",
+    "U": [
+      [
+        0,
+        100,
+        100
+      ],
+      [
+        5,
+        100,
+        100
+      ],
+      [
+        10,
+        100,
+        325
+      ],
+      [
+        15,
+        100,
+        325
+      ],
+      [
+        20,
+        100,
+        325
+      ],
+      [
+        25,
+        100,
+        325
+      ],
+      [
+        30,
+        100,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D098",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 100->325 at 15s",
+    "U": [
+      [
+        0,
+        100,
+        100
+      ],
+      [
+        5,
+        100,
+        100
+      ],
+      [
+        10,
+        100,
+        100
+      ],
+      [
+        15,
+        100,
+        325
+      ],
+      [
+        20,
+        100,
+        325
+      ],
+      [
+        25,
+        100,
+        325
+      ],
+      [
+        30,
+        100,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D099",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 100->325 at 20s",
+    "U": [
+      [
+        0,
+        100,
+        100
+      ],
+      [
+        5,
+        100,
+        100
+      ],
+      [
+        10,
+        100,
+        100
+      ],
+      [
+        15,
+        100,
+        100
+      ],
+      [
+        20,
+        100,
+        325
+      ],
+      [
+        25,
+        100,
+        325
+      ],
+      [
+        30,
+        100,
+        325
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D100",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 325->0 at 5s",
+    "U": [
+      [
+        0,
+        100,
+        325
+      ],
+      [
+        5,
+        100,
+        0
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D101",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 325->0 at 10s",
+    "U": [
+      [
+        0,
+        100,
+        325
+      ],
+      [
+        5,
+        100,
+        325
+      ],
+      [
+        10,
+        100,
+        0
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D102",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 325->0 at 15s",
+    "U": [
+      [
+        0,
+        100,
+        325
+      ],
+      [
+        5,
+        100,
+        325
+      ],
+      [
+        10,
+        100,
+        325
+      ],
+      [
+        15,
+        100,
+        0
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D103",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 325->0 at 20s",
+    "U": [
+      [
+        0,
+        100,
+        325
+      ],
+      [
+        5,
+        100,
+        325
+      ],
+      [
+        10,
+        100,
+        325
+      ],
+      [
+        15,
+        100,
+        325
+      ],
+      [
+        20,
+        100,
+        0
+      ],
+      [
+        25,
+        100,
+        0
+      ],
+      [
+        30,
+        100,
+        0
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D104",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 325->100 at 5s",
+    "U": [
+      [
+        0,
+        100,
+        325
+      ],
+      [
+        5,
+        100,
+        100
+      ],
+      [
+        10,
+        100,
+        100
+      ],
+      [
+        15,
+        100,
+        100
+      ],
+      [
+        20,
+        100,
+        100
+      ],
+      [
+        25,
+        100,
+        100
+      ],
+      [
+        30,
+        100,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D105",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 325->100 at 10s",
+    "U": [
+      [
+        0,
+        100,
+        325
+      ],
+      [
+        5,
+        100,
+        325
+      ],
+      [
+        10,
+        100,
+        100
+      ],
+      [
+        15,
+        100,
+        100
+      ],
+      [
+        20,
+        100,
+        100
+      ],
+      [
+        25,
+        100,
+        100
+      ],
+      [
+        30,
+        100,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D106",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 325->100 at 15s",
+    "U": [
+      [
+        0,
+        100,
+        325
+      ],
+      [
+        5,
+        100,
+        325
+      ],
+      [
+        10,
+        100,
+        325
+      ],
+      [
+        15,
+        100,
+        100
+      ],
+      [
+        20,
+        100,
+        100
+      ],
+      [
+        25,
+        100,
+        100
+      ],
+      [
+        30,
+        100,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  },
+  {
+    "ID": "D107",
+    "Group": "additional_fixed",
+    "Description": "throttle=100; brake 325->100 at 20s",
+    "U": [
+      [
+        0,
+        100,
+        325
+      ],
+      [
+        5,
+        100,
+        325
+      ],
+      [
+        10,
+        100,
+        325
+      ],
+      [
+        15,
+        100,
+        325
+      ],
+      [
+        20,
+        100,
+        100
+      ],
+      [
+        25,
+        100,
+        100
+      ],
+      [
+        30,
+        100,
+        100
+      ]
+    ],
+    "SourceSHA256": "generated from declared config"
+  }
+]
