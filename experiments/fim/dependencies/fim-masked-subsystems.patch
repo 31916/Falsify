@@ -1,0 +1,32 @@
+--- a/FISingle.m
++++ b/FISingle.m
+@@ -104,7 +104,7 @@
+ save_system(system,[],'OverwriteIfChangedOnDisk',true);
+ 
+ %% Information
+-line_handles = find_system(system,'FindAll','on','type','line');
++line_handles = find_system(system,'FindAll','on','LookUnderMasks','all','type','line');
+ nb_lines = length(line_handles);
+ 
+ % In order to read information about signal ports, we need to compile the model
+@@ -160,7 +160,7 @@
+ 
+ 
+ %% Change all the 'Sum' blocks from 'round' to 'rectangle' shape // use this in block replacemnet operations
+-sumb = find_system(model_copy_name_wo_ext,'BlockType','Sum');
++sumb = find_system(model_copy_name_wo_ext,'LookUnderMasks','all','BlockType','Sum');
+ for i = 1:length(sumb)
+     set_param(sumb{i},'IconShape', "rectangular");
+ end
+@@ -167,9 +167,9 @@
+ save_system(system, [],'OverwriteIfChangedOnDisk',true);
+ 
+ %% Information
+-line_handles = find_system(system,'FindAll','on','type','line');
++line_handles = find_system(system,'FindAll','on','LookUnderMasks','all','type','line');
+ 
+-block_handles = find_system(system, 'FindAll', 'on', 'Type', 'Block');
++block_handles = find_system(system, 'FindAll', 'on', 'LookUnderMasks', 'all', 'Type', 'Block');
+ 
+ nb_lines = length(line_handles);
+ 

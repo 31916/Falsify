@@ -12,6 +12,7 @@ slprj/*
 # Reproducible FIM derived models, isolated upstream copies, and full traces.
 results/fim/runs/
 results/fim/calibration/
+results/fim/torque_acceleration/
 
 # PySwarms (imported by the ARCH-pinned ConBO package) creates this log.
 /report.log

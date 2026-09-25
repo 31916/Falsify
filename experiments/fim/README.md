@@ -1,14 +1,16 @@
 # FIMによるAT故障注入実験
 
 研究用コードをこのフォルダに集約しています。既存のARCH2025要件やFalsify coreは変更しません。
-最初に `config/fim_at_spec.m`（初回予備実験の凍結設定）を読み、
-`matlab/run_fim_at_experiments.m` の `prepare_` でFIMへの接続を確認できます。
+現在の実験は **トルクコンバーター内部のトルク比低下と加速性能** です。
+最初に [実験手順](docs/torque-acceleration.md) と `config/fim_torque_spec.m` を読んでください。
+故障注入の入口は `matlab/run_fim_torque_acceleration.m` の `prepare_` です。
+実行済みの [結果](docs/torque-acceleration-results.md) と
+[全波形・入力・CSV集計](evidence/torque-acceleration-20260925/) をGit管理しています。
 
-RPM正加算の調査は [準備実験の説明](docs/rpm-calibration.md) と
-`config/rpm_calibration.json` を使います。初回の10故障設定は上書きしません。
-確認済みの結果は [RPM調査結果](docs/rpm-calibration-results.md)、
-全入力の境界と監査要約は [数値根拠](docs/rpm-calibration-evidence.json)、
-実際に使った入力波形の値は [固定入力](docs/rpm-calibration-inputs.json) です。
+旧RPM加算量調査の設定・専用コード・資料は削除しました。
+必要ならGit commit `1cb9fbf` から復元できます。Git管理外の過去の実行結果は削除していません。
+初回10故障の凍結プロファイル `fim_at_spec.m` と旧接続コードは、共通基盤の参照用として残しています。
+**現行のギア要件は `fim_torque_spec.m` の1～4と離散値検査**です。旧プロファイルを使わないでください。
 
 ## 配置
 
@@ -20,6 +22,7 @@ RPM正加算の調査は [準備実験の説明](docs/rpm-calibration.md) と
 | `tests/` | モニタ、エージェント、配置の検査 | する |
 | `dependencies/` | 取得元・commit固定、互換修正差分、環境定義 | する |
 | `docs/` | 実験方法・検証記録 | する |
+| `evidence/` | 確認済み予備実験の全24波形CSV・入力・集計・監査 | する |
 | リポジトリ直下 `.deps/fim/` | 固定版の外部コード、MATLABデータ | しない |
 | リポジトリ直下 `results/fim/` | 実験ごとの生成モデル・入力・全波形 | 大容量生成物はしない |
 
@@ -68,12 +71,14 @@ python3 experiments/fim/dependencies/prepare.py \
 ```matlab
 addpath('experiments/fim');
 setup_fim();
-test_fim_at_spec();
-runDirectory = run_fim_at_experiments('prepare'); % モデル生成のみ
+test_fim_torque_spec();
+runDirectory = run_fim_torque_acceleration('all');
 ```
 
-元の10故障予備実験を再実行する場合の手順は [初回実験の方法](docs/preliminary-experiment.md)。
-`run_fim_at_experiments()` の引数省略は全実験実行なので、目的のstageを明示してください。
+`all` はモデル生成→正常6入力→正常結果から要件固定→故障18入力→集計の順です。
+故障無効化で正常モデルに戻るかの追加検証18回を含め、合計42回シミュレーションします。
+Falsify / Ψ-TaLiRoの探索・学習はまだ実行しません。
+元の10故障の接続実装は [初回実験の方法](docs/preliminary-experiment.md) に記録しています。
 `s-taliro/dp_taliro` のMEXが未構築なら [Falsify README](../../README.md) の環境準備が必要です。
 同名モデルを手動で開いている場合は、編集を保存して手動で閉じてから実行してください。
 
@@ -93,6 +98,12 @@ python3.9 -m venv .venv-fim-psy
 仮想環境フォルダは絶対パスを内部に保持するため、フォルダ移動で移行しません。
 
 ## 実験上の注意
+
+現行実験は6種類の固定入力を用いた予備実験です。入力範囲全体の安全性や手法の優劣は主張しません。
+加速要件の期限20秒と車速選定ルールを先に決め、正常波形だけで車速しきい値を選びます。
+トルク比の減算は次元なしの固定値で、百分率低下ではありません。
+ギア範囲は両端を含む1～4、離散値は1・2・3・4です。0の余裕は違反ではありません。
+ギアの余裕と加速の余裕を最小値でまとめると1速/4速で探索指標が0になるため、別々に評価します。
 
 初回実験は最大10候補・3 seedsの疎通／予備比較でした。
 DDQNの学習更新とConBO-LSの追加BO評価は0回で、学習・最適化の性能比較ではありません。

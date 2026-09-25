@@ -1,0 +1,194 @@
+{
+  "Status": "PASS",
+  "CSVTraces": 24,
+  "SamplesPerTrace": 3001,
+  "PrimarySimulations": 24,
+  "FaultOffChecksPresent": 18,
+  "TargetSpeedMPH": 95,
+  "DeadlineSeconds": 20,
+  "ViolationsByCase": {
+    "B00": 0,
+    "T01": 0,
+    "T02": 1,
+    "T03": 1
+  },
+  "MaximumInjectionError": 9.769962616701378e-15,
+  "MaximumTorqueProductError": 7.73070496506989e-12,
+  "MaximumOffReplayError": 5.002220859751105e-12,
+  "Results": [
+    {
+      "Case": "B00",
+      "Input": "A",
+      "AccelerationRhoMPH": 1.144657813145301,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "B00",
+      "Input": "B",
+      "AccelerationRhoMPH": 18.573529857698006,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "B00",
+      "Input": "C",
+      "AccelerationRhoMPH": 25.213271492614993,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "B00",
+      "Input": "D",
+      "AccelerationRhoMPH": 5.504828680393004,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "B00",
+      "Input": "E",
+      "AccelerationRhoMPH": 20.794243976245,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "B00",
+      "Input": "F",
+      "AccelerationRhoMPH": 22.880407364179007,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T01",
+      "Input": "A",
+      "AccelerationRhoMPH": 0.34336664200459666,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T01",
+      "Input": "B",
+      "AccelerationRhoMPH": 17.631251022792995,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T01",
+      "Input": "C",
+      "AccelerationRhoMPH": 24.257035000770998,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T01",
+      "Input": "D",
+      "AccelerationRhoMPH": 4.609570779932099,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T01",
+      "Input": "E",
+      "AccelerationRhoMPH": 19.937827134342,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T01",
+      "Input": "F",
+      "AccelerationRhoMPH": 21.935991454843005,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T02",
+      "Input": "A",
+      "AccelerationRhoMPH": -0.8749035679052071,
+      "FaultInducedViolation": true
+    },
+    {
+      "Case": "T02",
+      "Input": "B",
+      "AccelerationRhoMPH": 16.233147554995995,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T02",
+      "Input": "C",
+      "AccelerationRhoMPH": 22.854005496021003,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T02",
+      "Input": "D",
+      "AccelerationRhoMPH": 3.253842943802894,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T02",
+      "Input": "E",
+      "AccelerationRhoMPH": 18.676652548188997,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T02",
+      "Input": "F",
+      "AccelerationRhoMPH": 20.548486002171998,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T03",
+      "Input": "A",
+      "AccelerationRhoMPH": -2.8954949498073006,
+      "FaultInducedViolation": true
+    },
+    {
+      "Case": "T03",
+      "Input": "B",
+      "AccelerationRhoMPH": 13.817865095919998,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T03",
+      "Input": "C",
+      "AccelerationRhoMPH": 20.431552168433,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T03",
+      "Input": "D",
+      "AccelerationRhoMPH": 1.026270148597206,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T03",
+      "Input": "E",
+      "AccelerationRhoMPH": 16.471392861930994,
+      "FaultInducedViolation": false
+    },
+    {
+      "Case": "T03",
+      "Input": "F",
+      "AccelerationRhoMPH": 18.179735219657005,
+      "FaultInducedViolation": false
+    }
+  ],
+  "SHA256": {
+    "fault_catalog.csv": "f012a8c1dffaed223bcc3f0b90d755b84fc64bcae39dedec611d79a258bc01b1",
+    "inputs.csv": "2a344ddefa747b47547745f4db573c8ee489572052a01f87cc7032299a9e563e",
+    "summary.csv": "9ac53cbb00f59c4e40beb6faa23eb5fa9e1ee186739e529b7e89147aae26ae1c",
+    "traces/B00_A.csv": "adfea9dfead926a8063572e7ff6f66d68d7d3d6bc24d0828d0e7ab5cd847f155",
+    "traces/B00_B.csv": "d1a0808c13bc6315016496a811750502d408a58f27e7e6dd2a32a2fd1323dfed",
+    "traces/B00_C.csv": "5bbc0ea9895b50a95e21f836981eba312c2ced449e22b9b12db534f07880035c",
+    "traces/B00_D.csv": "8fff531205070690f5e4574fcdcfbe8037b57951f9c100da9aeed0a6a833a63b",
+    "traces/B00_E.csv": "a83ad60885fae8ec4fe7a8f01ba018a26513cccc5c00847910553090a9d935de",
+    "traces/B00_F.csv": "9ebf93163dc4c21ce75cf757cf3e941c7e0d467f62e19f71ad5e30e3e91efd3b",
+    "traces/T01_A.csv": "7fc14a1edb04c13ce06562661738f46cda97101895ef580f5fd4d5ed7d3a95aa",
+    "traces/T01_B.csv": "b386e3dab1d0967b7efad9caec36d1a023eada85409099c0756bb7d67fb68fb1",
+    "traces/T01_C.csv": "caa2808c02a379f69d2fc7978832fd2170344722c314831c9991ad9b0995c965",
+    "traces/T01_D.csv": "87b787b8af6d32b823e960b21dd094c9893e3124d01417cbf8c4aed7aac51e1a",
+    "traces/T01_E.csv": "45e4a8cc04176be20dcf63f547d5a84befd2d27c19acde0c1b1537079e774e9a",
+    "traces/T01_F.csv": "23dc3f0d48f23d825757f15270302af1278bb9a29a8721b27fcef7a75072e600",
+    "traces/T02_A.csv": "ec3a3b619bbc66edfd6551bc1187183190abb508b208981155597cf4632d4f39",
+    "traces/T02_B.csv": "73821fb5147467c3487630d103a220085e6a6313a8d481a7269976ad6a5b3372",
+    "traces/T02_C.csv": "171ee8baa5133a30097a454bc355399790cf8985278fc0d262dff01ec43e7f0d",
+    "traces/T02_D.csv": "e55ba205ef9714c073d52a1c16bdfc46c2b99100291da454183c0e8cd14d8840",
+    "traces/T02_E.csv": "170b20fab79c3aa7e52818faca40ed83e273b09af106ad2c61cfc5f789fb59e3",
+    "traces/T02_F.csv": "b7f78f15503d52de923353d0780856b32d939df7929855346cc6e40624e0cdd0",
+    "traces/T03_A.csv": "fa7aec69663489ca76e8a9c9452c34bd433ab7ed2df67d3a9e6a796d910b6c9a",
+    "traces/T03_B.csv": "02d9f416942513e37ae9b4eb1aa0995ee9496dc0a2ccb6b549d127dc554250ca",
+    "traces/T03_C.csv": "4c6ebaeb127b17ea4b9d5ce575d4dbd66ad6abe0505c6dc55b0637f63484b9b1",
+    "traces/T03_D.csv": "f9c47fef4bbe7f5f255a4500c29321a3b2b6de0c3d6492bd9fb5df6b879d3c12",
+    "traces/T03_E.csv": "e22fd726d744aebec48f526e15595f116e82aa0028ab07fd35ad29bf03de6faf",
+    "traces/T03_F.csv": "6714399bd4d0b108596840cd10a6192405aebc79910524d104ad578ef3884d77"
+  },
+  "Scope": "Six fixed pilot inputs; not tool performance or an all-input safety proof."
+}
