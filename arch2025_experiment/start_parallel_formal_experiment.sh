@@ -102,8 +102,15 @@ compgen -G "$MEX_DIR/mx_dp_taliro.*" >/dev/null || {
   printf 'Run arch2025_experiment/build_arch2025_mex.m before starting.\n' >&2
   exit 10
 }
+compgen -G "$MEX_DIR/on_line.*" >/dev/null || {
+  printf 'S-TaLiRo online monitor MEX is not available in: %s\n' "$MEX_DIR" >&2
+  printf 'Run arch2025_experiment/build_arch2025_mex.m before starting.\n' >&2
+  exit 10
+}
 mex_files=("$MEX_DIR"/mx_dp_taliro.*)
 mex_file=${mex_files[0]}
+monitor_mex_files=("$MEX_DIR"/on_line.*)
+monitor_mex_file=${monitor_mex_files[0]}
 
 "$PYTHON" -c \
   "import csv,sys; rows=list(csv.DictReader(open(sys.argv[1],newline='',encoding='utf-8-sig'))); expected=int(sys.argv[2]); max_eval=int(sys.argv[3]); assert len(rows)==expected, (len(rows),expected); assert len({r['TrialID'] for r in rows})==expected; assert all(int(r['MaxEvaluations'])==max_eval for r in rows); assert len({r['BatchID'] for r in rows})>=int(sys.argv[4])" \
@@ -137,6 +144,9 @@ printf '%s\n' "$FALBENCH_SHA" > "$launch_root/falbench-sha.txt"
 "$PYTHON" -c \
   "import hashlib,pathlib,sys; p=pathlib.Path(sys.argv[1]); print(hashlib.sha256(p.read_bytes()).hexdigest(), p)" \
   "$mex_file" > "$launch_root/dp-taliro-mex-sha256.txt"
+"$PYTHON" -c \
+  "import hashlib,pathlib,sys; p=pathlib.Path(sys.argv[1]); print(hashlib.sha256(p.read_bytes()).hexdigest(), p)" \
+  "$monitor_mex_file" > "$launch_root/online-monitor-mex-sha256.txt"
 printf '%s\n' "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" > "$launch_root/started-at.txt"
 hostname > "$launch_root/hostname.txt"
 uname -a > "$launch_root/uname.txt"
