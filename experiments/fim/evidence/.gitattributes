@@ -1,0 +1,3 @@
+# Preserve byte-identical Python CSV exports (including standard CRLF).
+# Allow CR at end of line without disabling other whitespace checks.
+*.csv whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

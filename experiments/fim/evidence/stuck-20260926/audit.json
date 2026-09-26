@@ -1,0 +1,8 @@
+{
+  "Status": "PASS",
+  "Waveforms": 1300,
+  "NativeBlockTests": 18,
+  "DisabledChecks": 54,
+  "CounterexampleReplays": 0,
+  "Scope": "Finite paired-input screen, not tool performance or proof for all inputs"
+}

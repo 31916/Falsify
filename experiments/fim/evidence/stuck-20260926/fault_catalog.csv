@@ -1,0 +1,11 @@
+ID,Model,FaultBlock,Onset,Duration
+B00,fim_stuck_B00,,0,0
+S01,fim_stuck_S01,Transmission/TransmissionRatio/Stuck-at1,5,0.2
+S02,fim_stuck_S02,Transmission/TransmissionRatio/Stuck-at1,5,0.5
+S03,fim_stuck_S03,Transmission/TransmissionRatio/Stuck-at1,5,1
+S04,fim_stuck_S04,Transmission/TransmissionRatio/Stuck-at1,10,0.2
+S05,fim_stuck_S05,Transmission/TransmissionRatio/Stuck-at1,10,0.5
+S06,fim_stuck_S06,Transmission/TransmissionRatio/Stuck-at1,10,1
+S07,fim_stuck_S07,Transmission/TransmissionRatio/Stuck-at1,15,0.2
+S08,fim_stuck_S08,Transmission/TransmissionRatio/Stuck-at1,15,0.5
+S09,fim_stuck_S09,Transmission/TransmissionRatio/Stuck-at1,15,1
