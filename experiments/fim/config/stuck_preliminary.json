@@ -1,0 +1,21 @@
+{
+  "id": "FIM_STUCK_GEAR_PILOT_20260926_V1",
+  "fault_type": "Stuck-at",
+  "fault_level": "Transmission/TransmissionRatio",
+  "fault_source": "gear",
+  "onsets_seconds": [5, 10, 15],
+  "durations_seconds": [0.2, 0.5, 1.0],
+  "input_design": "6 representatives + 64 corners + 64 LHS, deduplicated to 130",
+  "lhs_seed": 20260926,
+  "stop_time_seconds": 30,
+  "control_step_seconds": 5,
+  "throttle_range_percent": [60, 100],
+  "brake": 0,
+  "target_speed_mph": 95,
+  "deadline_seconds": 20,
+  "gear_values": [1,2,3,4],
+  "solver": "ode5",
+  "fixed_step_seconds": 0.01,
+  "scope": "Paired fixed-input screen; no learning or tool-performance ranking; no universal safety claim",
+  "selection_rule": "All 9 onset-duration combinations declared before fault simulations; same time window for every input; do not retune from observed failures"
+}

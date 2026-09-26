@@ -13,6 +13,9 @@ slprj/*
 results/fim/runs/
 results/fim/calibration/
 results/fim/torque_acceleration/
+results/fim/comparison/
+results/fim/stuck/
+results/fim/experiment-worker.lock
 
 # PySwarms (imported by the ARCH-pinned ConBO package) creates this log.
 /report.log

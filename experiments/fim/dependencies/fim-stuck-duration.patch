@@ -1,0 +1,9 @@
+--- a/FCSingle.m
++++ b/FCSingle.m
+@@ -143,2 +143,4 @@
+-       set_param(strcat(Fullpath, '/Pulse Generator'), 'PhaseDelay', fot);
+-       set_param(strcat(Fullpath, '/Pulse Generator'), 'PulseWidth', fd);
++       pulse = find_system(Fullpath,'SearchDepth',1,'LookUnderMasks','all','BlockType','DiscretePulseGenerator');
++       assert(numel(pulse)==1);
++       set_param(pulse{1}, 'PulseType','Sample based','SampleTime','.01','Period','50000');
++       set_param(pulse{1}, 'PhaseDelay',num2str(round(str2double(fot)/.01)), 'PulseWidth',num2str(round(str2double(fd)/.01)));

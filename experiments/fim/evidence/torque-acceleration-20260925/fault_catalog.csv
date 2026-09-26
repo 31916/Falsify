@@ -1,5 +1,0 @@
-ID,Model,FaultBlock,Delta
-B00,fim_tq_B00,,0
-T01,fim_tq_T01,Transmission/TorqueConverter/Offset1,0.02
-T02,fim_tq_T02,Transmission/TorqueConverter/Offset1,0.05
-T03,fim_tq_T03,Transmission/TorqueConverter/Offset1,0.1

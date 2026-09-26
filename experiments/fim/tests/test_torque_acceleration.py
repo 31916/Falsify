@@ -7,7 +7,7 @@ import unittest
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "python"))
-from audit_torque_acceleration import metrics
+from monitor_metrics import metrics
 
 
 class TorqueTests(unittest.TestCase):
