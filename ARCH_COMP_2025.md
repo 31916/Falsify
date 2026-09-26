@@ -89,6 +89,68 @@ export FALSIFY_ARCH2025_RESUME_PASSED=0
 matlab -batch "validate_arch2025_all"
 ```
 
+## 正式実験ランナー
+
+本研究の正式実験は、49条件、4手法、10 SEEDの `1960` 試行です。各試行は最大1500 episodeで、各episodeにつき公式モデルを1回評価します。早期終了が一度もなければ最大評価回数は `1960 × 1500 = 2,940,000` 回です。公式robustnessが負になった試行は、その時点で反例発見として終了します。
+
+1500評価と10反復はARCH-COMP 2025の報告条件に合わせています。SEED値 `20250001`〜`20250010` と、比較対象をRAND、A3C、ACER、DDQNの4手法とする点は本研究の実験設計です。
+
+正式ランナーは、ソースcheckoutと大容量の実験出力を分離します。
+
+```text
+experiment-root/
+├── src/
+│   ├── Falsify/
+│   ├── ARCH-COMP/
+│   └── FalBenchGen/
+├── env/falsify-py39/
+├── assets/mathworks/sldemo_autotrans_data.mat
+├── build/mex/
+├── manifests/formal/trials.csv
+├── runs/
+├── logs/
+└── summaries/
+```
+
+依存リポジトリは次のrevisionへ固定します。
+
+```sh
+git clone https://gitlab.com/goranf/ARCH-COMP.git "$ROOT/src/ARCH-COMP"
+git -C "$ROOT/src/ARCH-COMP" checkout 5e8f72b8d5f30be002f40ae5df4a8e04d7f64e3c
+
+git clone https://github.com/Fenking/FalBenchGen.git "$ROOT/src/FalBenchGen"
+git -C "$ROOT/src/FalBenchGen" checkout a6dc83d64e329a6183f910c512fc52ab27a13553
+```
+
+Falsifyは対象PRのmerge commitまたは確認対象commitへ固定します。Python環境、`dp_taliro` MEX、1960試行のmanifestは次のように準備します。
+
+```sh
+python3.9 -m venv "$ROOT/env/falsify-py39"
+"$ROOT/env/falsify-py39/bin/python" -m pip install \
+  -r "$ROOT/src/Falsify/requirements-falsify.txt"
+
+matlab -batch "addpath('$ROOT/src/Falsify/arch2025_experiment'); build_arch2025_mex('$ROOT/build/mex')"
+
+mkdir -p "$ROOT/manifests/formal"
+"$ROOT/env/falsify-py39/bin/python" \
+  "$ROOT/src/Falsify/arch2025_experiment/formal_tools.py" build-manifest \
+  --catalog "$ROOT/src/Falsify/arch2025_experiment/catalog.csv" \
+  --output "$ROOT/manifests/formal/trials.csv"
+```
+
+AT補助データは `prepare_arch2025_at_data` で取得したファイルを指定します。ランナーはファイルを変更せず、開始時にSHA-256を記録します。
+
+```sh
+export FALSIFY_ARCH2025_EXPERIMENT_ROOT="$ROOT"
+export FALSIFY_ARCH2025_EXPECTED_SHA=使用するFalsifyの完全なcommit_SHA
+export FALSIFY_ARCH2025_AT_DATA=/absolute/path/to/sldemo_autotrans_data.mat
+export FALSIFY_ARCH2025_WORKER_COUNT=1
+export FALSIFY_ARCH2025_CPUS_PER_WORKER=1
+bash "$ROOT/src/Falsify/arch2025_experiment/start_parallel_formal_experiment.sh"
+```
+
+既定値は1ワーカー、ワーカー当たり1 CPU、CPU固定なしです。ワーカー数はMATLABライセンス、CPU、メモリ、共有サーバの規則を確認したうえで明示的に増やします。各試行は完了マーカーを持ち、完了済み試行を再実行せずに再開できます。標準出力、標準エラー、実行コマンド、環境変数、Git SHA、所要時間、最大メモリ、終了理由は実験ルートへ保存されます。
+
 ## モデル固有の接続
 
 - SB: 公式名SB1-SB5を、FalBenchGenの `s1`、`s3`、`s5`、`cc3`、`cc5` にそれぞれ対応付けます。ARCH-COMP 2025ではInstance 2のみを対象とし、4個の制御点を各6秒保持します。SB4とSB5の外側時間区間は公式表どおり `[0,19]` と `[0,17]` です。選択ネットワークは各仕様の `a2_k1_1_4_9_10_0.01_LSTM/*a2_k1_1.mat` です。
