@@ -297,13 +297,15 @@ def start_learning(algo, obs_space_dim, action_space_dim, alpha_arg):
 
 def driver(state, r):
     reward = math.exp( - alpha * r) - 1.0
-    state = np.array(state, np.float32)
+    # MATLAB converts a one-element row vector to a Python scalar.  Keep the
+    # observation contract vector-valued for every agent, including 1-D SB/SC.
+    state = np.asarray(state, dtype=np.float32).reshape(-1)
     action = agent.act_and_train(state, reward)
     action = np.minimum(1.0, np.maximum(-1.0, action))
     return array.array('d', action.tolist())
 
 def act(state):
-    state = np.array(state, np.float32)
+    state = np.asarray(state, dtype=np.float32).reshape(-1)
     action = agent.act(state)
     action = np.minimum(1.0, np.maximum(-1.0, action))
     return array.array('d', action.tolist())
@@ -312,7 +314,7 @@ def stop_episode():
     agent.stop_episode()
 
 def stop_episode_and_train(state, reward):
-    s = np.array(state, np.float32)
+    s = np.asarray(state, dtype=np.float32).reshape(-1)
     agent.stop_episode_and_train(s, reward)
 
 def save(savefiles):
