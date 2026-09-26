@@ -4,12 +4,21 @@ slprj/*
 
 # Local Python environment
 .venv/
+.venv-falsify/
+.deps/
 
 # MATLAB / Simulink generated files
 *.slxc
 *.slx.r20*
 *.mexmaca64
 *.o
+**/slprj/
+arch2025_generated/*.slx
+arch2025_generated/*.mdl
+arch2025_generated/rl_agent_*_arch2025_pconst.m
+
+# Experiment outputs are generated locally and are not source code.
+results/arch2025/
 
 # Temporary / backup files
 *_backup.*
