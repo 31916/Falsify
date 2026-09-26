@@ -2,6 +2,11 @@ function trace=fim_comparison_plant(campaign,caseID,u,outputFile,faultEnabled)
 % One candidate simulation on the copied FIM plant. No normal simulation here.
 if nargin<4, outputFile=''; end
 if nargin<5, faultEnabled=true; end
+protocol=jsondecode(fileread(fullfile(campaign,'protocol.json')));
+if isfield(protocol,'fault_family') && strcmp(protocol.fault_family,'stuck')
+    trace=fim_stuck_plant(campaign,caseID,u,outputFile,faultEnabled);
+    return
+end
 paths=fim_paths(); spec=fim_torque_spec();
 target=struct('DeadlineSeconds',20,'TargetSpeedMPH',95,'Formula','<>_[0,20](fast)');
 catalogFile=fullfile(campaign,'fault_catalog.csv');

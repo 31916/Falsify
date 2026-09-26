@@ -5,8 +5,10 @@ outdir=fullfile(campaign,'wrappers'); if ~isfolder(outdir), mkdir(outdir); end
 load_system(fullfile(campaign,'FInjLib.slx')); set_param('FInjLib','Lock','off');
 load_system(fullfile(paths.Repo,'autotrans','autotrans_mod04.slx'));
 protocol=jsondecode(fileread(fullfile(campaign,'protocol.json')));
+catalog=readtable(fullfile(campaign,'fault_catalog.csv'),'TextType','string');
 for id=[{'B00'} reshape(cellstr(string(protocol.cases)),1,[])]
-    source=['fim_tq_' id{1}]; model=['fim_cmp_' id{1}];
+    index=find(catalog.ID==string(id{1})); assert(isscalar(index));
+    source=char(catalog.Model(index)); model=['fim_cmp_' id{1}];
     file=fullfile(campaign,'plants',[source '.slx']);
     if ~isfile(file), file=fullfile(campaign,'plants',[source '.mdl']); end
     load_system(file); save_system(source,fullfile(outdir,[model '.slx']));

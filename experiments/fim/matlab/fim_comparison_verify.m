@@ -9,13 +9,30 @@ assert(normal.Monitor.Pass,'FIM:BaselineViolation','Normal model violates the fr
 result=struct('ValidCounterexample',fault.Rho<0 && normal.Monitor.Pass, ...
     'FaultRho',fault.Rho,'NormalRho',normal.Rho,'ReplayError',error_, ...
     'Seconds',toc(started),'Simulations',2);
+if isfield(fault,'Applied')
+    disabled=fim_comparison_plant(campaign,caseID,u,'',false);
+    result.DisabledReplayError=max(abs(disabled.Y-normal.Y),[],'all');
+    assert(result.DisabledReplayError<1e-7,'FIM:DisabledMismatch','Disabled fault differs from normal.');
+    result.Simulations=3;
+    result.Seconds=toc(started);
+end
 if ~isempty(folder)
     if ~isfolder(folder), mkdir(folder); end
-    save(fullfile(folder,'verification.mat'),'fault','normal','result');
+    if isfield(fault,'Applied')
+        save(fullfile(folder,'verification.mat'),'fault','normal','disabled','result');
+    else
+        save(fullfile(folder,'verification.mat'),'fault','normal','result');
+    end
     for data={fault,normal}
         tr=data{1};
-        values=[tr.T tr.Y tr.RatioBefore tr.RatioAfter];
-        tbl=array2table(values,'VariableNames',{'TimeSeconds','RPM','SpeedMPH','Gear','RatioBefore','RatioAfter'});
+        if isfield(tr,'Applied')
+            values=[tr.T tr.Y tr.Command tr.Applied tr.Ratio tr.Gate];
+            names={'TimeSeconds','RPM','SpeedMPH','Gear','CommandedGear','AppliedGear','GearRatio','FaultGate'};
+        else
+            values=[tr.T tr.Y tr.RatioBefore tr.RatioAfter];
+            names={'TimeSeconds','RPM','SpeedMPH','Gear','RatioBefore','RatioAfter'};
+        end
+        tbl=array2table(values,'VariableNames',names);
         writetable(tbl,fullfile(folder,[tr.Case '.csv']));
     end
     writematrix(u,fullfile(folder,'input.csv'));

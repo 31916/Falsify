@@ -24,6 +24,8 @@ results/fim/experiment-worker.lock
 *.slxc
 *.slx.r20*
 *.mexmaca64
+*.mexa64
+.runtime/
 *.o
 **/slprj/
 arch2025_generated/*.slx

@@ -18,8 +18,8 @@ import time
 
 EXPERIMENT = Path(__file__).resolve().parents[1]
 REPO = EXPERIMENT.parents[1]
-MATLAB = '/Applications/MATLAB_R2026a.app/bin/matlab'
-PSY = str(REPO.parent/'FIM'/'.venv-psy-arch/bin/python')
+MATLAB = os.environ.get('FIM_MATLAB', '/Applications/MATLAB_R2026a.app/bin/matlab')
+PSY = os.environ.get('FIM_PSY_PYTHON', str(REPO.parent/'FIM'/'.venv-psy-arch/bin/python'))
 
 
 def write_json(path, value):
@@ -77,13 +77,20 @@ def freeze(campaign):
         hashes['@campaign/'+str(source.relative_to(campaign))] = hashlib.sha256(source.read_bytes()).hexdigest()
     for source in sorted((campaign/'wrappers').glob('*.slx')):
         hashes['@campaign/'+str(source.relative_to(campaign))] = hashlib.sha256(source.read_bytes()).hexdigest()
-    for name in ['protocol.json','fault_catalog.csv','baseline-inputs.csv','fixed-inputs.csv']:
+    for name in ['protocol.json','fault_catalog.csv','baseline-inputs.csv','fixed-inputs.csv','runtime.json']:
         source=campaign/name
         if source.is_file():
             hashes['@campaign/'+name]=hashlib.sha256(source.read_bytes()).hexdigest()
     for source in [REPO/'.deps/fim/arch/models/FALS/transmission/Autotrans_shift.mdl',
                    REPO/'.deps/fim/model-data/sldemo_autotrans_data.mat']:
         hashes[str(source.relative_to(REPO))]=hashlib.sha256(source.read_bytes()).hexdigest()
+    # Linux native monitors and the source wrapper template are executable
+    # inputs too; record their bytes in addition to the Python/MATLAB sources.
+    for source in [REPO/'autotrans/autotrans_mod04.slx',
+                   REPO/'s-taliro/dp_taliro/mx_dp_taliro.mexa64',
+                   REPO/'s-taliro/monitor/on_line.mexa64']:
+        if source.is_file():
+            hashes[str(source.relative_to(REPO))]=hashlib.sha256(source.read_bytes()).hexdigest()
     write_json(campaign/'source-hashes.json', hashes)
 
 
@@ -178,10 +185,10 @@ def planned_jobs(protocol):
     return jobs
 
 
-def run(campaign):
+def run(campaign, validator=validate_protocol):
     assert json.loads((campaign/'preflight.json').read_text())['Status']=='PASS'
     protocol = json.loads((campaign/'protocol.json').read_text())
-    validate_protocol(protocol)
+    validator(protocol)
     jobs=planned_jobs(protocol)
     # Resuming preserves completed trials but never silently retries partial trials.
     results = []

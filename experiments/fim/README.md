@@ -9,12 +9,14 @@ FIMの `FISingle` で故障ブロックを挿入し、`FCSingle` で有効化す
 |---|---|---|
 | トルク比の本実験 | `config/torque_comparison.json` | `python/run_torque_campaign.py` |
 | ギア指令Stuck-atの予備実験 | `config/stuck_preliminary.json` | `python/run_stuck_preliminary.py` |
+| ギア指令Stuck-atのサーバ本実験 | `config/stuck_comparison.json` | `python/run_stuck_campaign.py` |
 
 [本実験条件](docs/formal-protocol.md) ／ [Stuck-atの実装と検査](docs/stuck-preliminary.md)
 
 本実験: −0.02/−0.03/−0.04/−0.05/−0.10 × RAND/ACER/A3C/DDQN/Ψ-TaLiRo × 100独立試行。
 1試行最大1500入力、初期学習用入力も含む。最初の再検証済み反例で停止する。
-Stuck-atは固定130入力で調べる予備実験であり、ツールの性能比較ではない。
+Stuck-atの固定130入力の予備実験とは別に、同じ9故障で5手法×100試行の本実験を行う。
+Linux専用の準備・事前検査・実行方法は [Stuck-at本実験](docs/stuck-formal-server.md) を参照。
 
 ## 配置
 
