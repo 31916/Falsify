@@ -27,6 +27,15 @@ class ParallelTest(unittest.TestCase):
         self.assertTrue(all(len(g)==4 for g in groups))
         self.assertEqual(sorted(sum(groups,[])),list(range(32)))
 
+    def test_matlab_temp_path_is_short_and_private(self):
+        first = parallel.short_temporary_directory()
+        self.assertTrue(Path(first).is_dir())
+        second = parallel.short_temporary_directory()
+        self.assertFalse(Path(first).exists())
+        self.assertNotEqual(first,second)
+        self.assertLess(len(second),40)
+        parallel.TEMPORARY.cleanup()
+
     def test_unique_balanced_paired_trials(self):
         for family,total in [('torque',2500),('stuck',4500)]:
             p = protocol(family); parallel.validate(p)

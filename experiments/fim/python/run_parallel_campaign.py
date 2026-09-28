@@ -16,6 +16,7 @@ import random
 import signal
 import subprocess
 import sys
+import tempfile
 import time
 
 import run_torque_campaign as shared
@@ -23,6 +24,17 @@ from run_stuck_campaign import validate_protocol as validate_stuck
 
 REPO, EXPERIMENT = shared.REPO, shared.EXPERIMENT
 SCRIPT = Path(__file__).resolve()
+TEMPORARY = None
+
+
+def short_temporary_directory():
+    # MATLAB CEF IPC uses Unix sockets and rejects long TMPDIR paths.
+    # This private directory lives only until the next trial/process exit.
+    global TEMPORARY
+    if TEMPORARY is not None:
+        TEMPORARY.cleanup()
+    TEMPORARY = tempfile.TemporaryDirectory(prefix='fim-', dir='/tmp')
+    return TEMPORARY.name
 
 
 def now():
@@ -68,10 +80,10 @@ def configure(campaign, label, cpus):
     os.sched_setaffinity(0, cpus)
     assert os.sched_getaffinity(0) == set(cpus)
     root = campaign/'workers'/label
-    for folder in ('work', 'prefs', 'tmp'):
+    for folder in ('work', 'prefs'):
         (root/folder).mkdir(parents=True, exist_ok=True)
     os.environ.update(FIM_CPU_THREADS='4', FIM_WORK_DIR=str(root/'work'),
-                      MATLAB_PREFDIR=str(root/'prefs'), TMPDIR=str(root/'tmp'))
+                      MATLAB_PREFDIR=str(root/'prefs'), TMPDIR=short_temporary_directory())
     os.environ.update(shared.environment())
     return root
 
@@ -152,10 +164,10 @@ def worker(campaign, index):
             folder = campaign/'trials'/f'{case}_{algorithm}_{seed}'
             assert not folder.exists() and not folder.with_suffix('.log').exists()
             workspace = root/'runtime'/folder.name
-            for name in ('work','prefs','tmp'):
+            for name in ('work','prefs'):
                 (workspace/name).mkdir(parents=True, exist_ok=False)
             os.environ.update(FIM_WORK_DIR=str(workspace/'work'),
-                              MATLAB_PREFDIR=str(workspace/'prefs'),TMPDIR=str(workspace/'tmp'))
+                              MATLAB_PREFDIR=str(workspace/'prefs'),TMPDIR=short_temporary_directory())
             started = now(); clock = time.perf_counter()
             shared.write_json(root/'status.json',dict(Status='running',Completed=completed,Total=len(jobs),
                 PID=os.getpid(),Current=[case,algorithm,seed],CPUs=sorted(os.sched_getaffinity(0)),UpdatedUTC=started))
