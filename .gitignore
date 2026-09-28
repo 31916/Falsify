@@ -4,8 +4,8 @@ slprj/*
 
 # Local Python environment
 .venv/
-.venv-falsify/
-.venv-fim-psy/
+.venv-falsify
+.venv-fim-psy
 .deps/
 **/__pycache__/
 
