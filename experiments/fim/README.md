@@ -5,6 +5,11 @@ FIMの `FISingle` で故障ブロックを挿入し、`FCSingle` で有効化す
 
 ## 現行実験
 
+**2026-09-28以降の本実験:** 両実験をサーバ上で各4ワーカー×4論理CPUにそろえ、
+旧本実験結果を引き継がず再実行する。
+[同時再実行の条件・入口](docs/parallel-server-restart.md) を使用する。
+下記の従来の逐次ランナーは互換用として残している。
+
 | 実験 | 設定 | 実行入口 |
 |---|---|---|
 | トルク比の本実験 | `config/torque_comparison.json` | `python/run_torque_campaign.py` |

@@ -1,7 +1,9 @@
 function result=run_fim_torque_search(campaign,caseID,algorithm,seed,budget,folder)
 % Actual Falsify loop, with a FIM-only bridge and an audited episode objective.
 paths=fim_paths(); assert(~isfolder(folder),'Use a fresh trial directory.'); mkdir(folder);
-cleanup=onCleanup(@() cd(paths.Repo)); cd(paths.Repo);
+original=pwd; cleanup=onCleanup(@() cd(original));
+runtime=getenv('FIM_WORK_DIR');
+if isempty(runtime), cd(paths.Repo); else, cd(runtime); end
 pyenv('Version',fullfile(paths.Repo,'.venv-falsify','bin','python'));
 insert(py.sys.path,int32(0),paths.Repo);
 insert(py.sys.path,int32(0),fullfile(paths.Experiment,'python'));

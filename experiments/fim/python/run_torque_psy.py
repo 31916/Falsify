@@ -25,7 +25,7 @@ from staliro.core.model import Model, Trace, ExtraResult
 from staliro.options import Options
 from staliro.staliro import staliro
 from fim_psy_gpr import ExternalGPRCPU
-from run_torque_campaign import write_json
+from run_torque_campaign import write_json, cpu_threads
 
 
 class CountedGPR(ExternalGPRCPU):
@@ -123,7 +123,8 @@ def main():
     protocol=json.loads((args.campaign/'protocol.json').read_text())
     assert args.case in ['B00']+protocol['cases'], 'Unknown fault case'
     args.folder.mkdir(exist_ok=False)
-    torch.set_num_threads(1)
+    torch.set_num_threads(cpu_threads())
+    torch.set_num_interop_threads(1)
     np.random.seed(args.seed); random.seed(args.seed); torch.manual_seed(args.seed)
     CountedGPR.fits=0
     import lsemibo.coreAlgorithm.staliroIntegration as implementation
@@ -133,7 +134,10 @@ def main():
     runtime['Python']=sys.version
     write_json(args.folder/'runtime.json',runtime)
     import matlab.engine
-    engine=matlab.engine.start_matlab('-nodesktop -nosplash -singleCompThread')
+    options='-nodesktop -nosplash'
+    if cpu_threads()==1:
+        options+=' -singleCompThread'
+    engine=matlab.engine.start_matlab(options)
     try:
         engine.addpath(str(Path(__file__).resolve().parents[1]),nargout=0)
         engine.setup_fim(nargout=0)

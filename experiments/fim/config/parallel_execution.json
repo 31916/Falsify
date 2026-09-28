@@ -1,0 +1,12 @@
+{
+  "id": "FIM_SERVER_RESTART_20260928_4X4",
+  "workers_per_campaign": 4,
+  "cpu_threads_per_worker": 4,
+  "cpu_affinity": {
+    "torque": [[0, 1, 16, 17], [4, 5, 20, 21], [8, 9, 24, 25], [12, 13, 28, 29]],
+    "stuck": [[2, 3, 18, 19], [6, 7, 22, 23], [10, 11, 26, 27], [14, 15, 30, 31]]
+  },
+  "assignment": "Each case/seed block runs all five methods on one fixed worker; 25 blocks per case per worker. Randomized method order. Fresh process and learner for every trial.",
+  "cpu_topology": "Each worker gets one P core with both SMT threads and two E cores; no logical CPU is shared across workers. Validated for yoriyuki-raytrek i9-14900KF.",
+  "timing_caveat": "Wall time under concurrent server load, not isolated latency. Affinity is fixed, but other workers and tail-end idle slots affect contention; report worker and timestamps and do not mix old Mac/server measurements. Four assigned logical CPUs do not imply fourfold acceleration."
+}

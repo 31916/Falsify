@@ -33,7 +33,7 @@ def environment():
     env = dict(os.environ)
     for name in ['OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS',
                  'VECLIB_MAXIMUM_THREADS', 'NUMEXPR_NUM_THREADS']:
-        env[name] = '1'
+        env[name] = str(cpu_threads())
     env['PYTHONUNBUFFERED'] = '1'
     return env
 
@@ -42,15 +42,22 @@ def quote(value):
     return "'"+str(value).replace("'", "''")+"'"
 
 
+def cpu_threads():
+    value = int(os.environ.get('FIM_CPU_THREADS', '1'))
+    assert value in (1, 4), 'Unsupported numerical thread limit'
+    return value
+
+
 def matlab(expression):
-    return [MATLAB, '-singleCompThread', '-batch',
+    options = ['-singleCompThread'] if cpu_threads() == 1 else []
+    return [MATLAB, *options, '-batch',
             f"addpath({quote(EXPERIMENT)}); setup_fim; {expression}"]
 
 
 def execute(command, log):
     print('EXEC', ' '.join(command), flush=True)
     with open(log, 'x') as output:
-        proc = subprocess.Popen(command, cwd=REPO, env=environment(),
+        proc = subprocess.Popen(command, cwd=os.environ.get('FIM_WORK_DIR', str(REPO)), env=environment(),
                                 stdout=output, stderr=subprocess.STDOUT)
         write_json(Path(log).with_suffix('.process.json'), {'PID': proc.pid, 'Command': command})
         code = proc.wait()
